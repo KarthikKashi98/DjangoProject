@@ -1,28 +1,18 @@
 
-
-    $(".nav-link a").on("click", function(){
-   $(".nav-link ").find(".active").removeClass("active");
-   $(this).parent().addClass("active");
-   console.log("jkhhhiuhiiii")
-
-});
-
-
 $(function(){
 
-    let url = "{% url 'users:homepage1' %}";
        $.ajax(
     {
-        type:"GET",
-        url: "/todo1",
+        type:"POST",
+        url: "/total_tasks/",
 
         success: function( json )
         {
           console.log(json)
           var data = json.my_data
           var cols = json.my_cols
-          $(".tab1").html('<table id="myTable" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
-            $("#myTable").DataTable({
+          $(".tab2").html('<table id="myTable1" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
+            $("#myTable1").DataTable({
                 order :[[1,"asc"]],
                 "data":data,
                 "columns":cols,
@@ -44,32 +34,43 @@ $(function(){
                      "render": function (data, type, full, meta) {
                             return type === 'display'? '<div title="' + full[3] + '">' + data : data;
                      },
-                      "width": 500
+                      "width": 470
 
                   },
-
                   {
                     "target":6,
                     "render": function (data, type, full, meta) {
+                    return `<progress id="alpha" value="`+full[6]+`" max="100">`+full[6]+`</progress>`
 
-
-                            return `<progress id="alpha" value="`+full[6]+`" max="100">`+full[6]+`</progress>`
 
                     }
-                    }
-                    ,
+
+
+                  },
                   {
                     "target":7,
                      "render": function (data, type, full, meta) {
-                             return `<a class="btn btn-info btn-sm" href=/delete_task/` + full[0] + `/>` + `Delete` + `</a>&nbsp;<a class="btn btn-info btn-sm" href=/completed_task/` + full[0] + `>` + `finished` + `</a>`;
+                            if (full[5] =="Completed"){
+                                 return `<a class="btn btn-info btn-sm" href=/delete_task/` + full[0] + `/>` + `Delete` + `</a>&nbsp; <a class="btn btn-info btn-sm" href=/revert_task/` + full[0] + `>` + `Revert` + `</a>`;
+
+                             }
+
+                             else{
+                                        return `<a class="btn btn-info btn-sm" href=/delete_task/` + full[0] + `/>` + `Delete` + `</a>&nbsp;<a class="btn btn-info btn-sm" href=/completed_task/` + full[0] + `>` + `finished` + `</a>`;
+
+                             }
+
+
+
+                          }
                      }
 
 
-                                      }
+
 
                 ]
             })
-             $('#myTable').on('draw.dt', function () {
+             $('#myTable1').on('draw.dt', function () {
                     $('[data-toggle="tooltip"]').tooltip();
                 });
         }
@@ -77,3 +78,4 @@ $(function(){
 
 
 })
+
