@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{%  block title %}
+homepage
+
+{% endblock %}
+
+{% block content %}
+<div class="heading" style="text-align:center;background-color:yellow;" >
+    <!--        <span class="edit" style="margin-right:0px">-->
+    <!--            <button class="btn btn-primary btn-sm">Edit mode</button>&nbsp;-->
+    <!--            <button class="btn btn-primary btn-sm">Add Task</button>-->
+    <!--        </span>-->
+
+    <!--    <span class="edit" style="margin:0 auto;text-align:center">-->
+    <!--           <b style="font-size:17px">Task to be achieve</b>-->
+    <!--        </span>-->
+    <div class="row">
+        <div class="col">
+
+
+
+        </div>
+        <div class="col-5">
+            <b style="font-size:17px">Task to be achieve</b>
+
+        </div>
+
+        <div class="col">
+            <button class="btn btn-primary btn-sm">Edit mode</button>&nbsp;
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Task</button>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">-->
+<!--    Launch demo modal-->
+<!--</button>-->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action = "/add_task/" method = "post">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Your Task here </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    {% csrf_token %}
+                    <table id ="form">
+                        {{ form.as_table }}
+                    </table>
+<!--                    <input type="submit" value=Submit>-->
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="submit" value=Submit class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="tab1" style="font-size:12px">
+
+
+
+</div>
+
+
+{% endblock %}
