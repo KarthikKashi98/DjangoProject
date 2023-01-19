@@ -79,10 +79,101 @@ def completed_task(request,id):
     if request.method == "GET":
         import datetime
         # UserInfo.objects.filter(id=id).delete()
-        UserInfo.objects.filter(pk=id).update(completed_task=datetime.datetime.now())
+        UserInfo.objects.filter(pk=id).update(completed_task=datetime.datetime.now(),status="Completed",percentage= 100)
 
     return redirect('homepage')
 
 
+
+
+
+
+
+@csrf_exempt
+def total_tasks(request):
+    print("i am in total_task ")
+    if request.method == "GET":
+
+        return render(request, "total_task.html")
+
+    if request.method == "POST":
+        df = pd.DataFrame(
+            list(UserInfo.objects.filter(first_name='Karthik').values()))
+        # df = pd.DataFrame(list(UserInfo.objects.all().values('author', 'date', 'slug')))
+        print(df.head())
+        df.drop(["first_name", "completed_task"], inplace=True, axis=1)
+        df["target_date"] = df["target_date"].astype(str)
+        df[""] = None
+        df["date_assigned"] = df["date_assigned"].astype(str)
+        my_data = json.loads(df.to_json(orient="split"))["data"]
+        my_cols = [{"title": str(col)} for col in json.loads(df.to_json(orient="split"))["columns"]]
+        # print(my_cols)
+        data = {"my_data": my_data, "my_cols": my_cols}
+        # print(data)
+        return JsonResponse(data)
+
+
+def revert_task(request, id):
+    print("i am in delete ")
+    if request.method == "GET":
+        import datetime
+
+        UserInfo.objects.filter(pk=id).update(completed_task=None,status="Started")
+
+    return redirect('homepage')
+
+
+
+@csrf_exempt
+def completed_tasks_page(request):
+    print("i am in completed---------_task ")
+    if request.method == "GET":
+
+        return render(request, "completed_task.html")
+
+    if request.method == "POST":
+        print("i am in completed---------_task ")
+        df = pd.DataFrame(
+            list(UserInfo.objects.filter(first_name='Karthik').filter(completed_task__isnull=False).values()))
+        # df = pd.DataFrame(list(UserInfo.objects.all().values('author', 'date', 'slug')))
+        print(df.head())
+        df.drop(["first_name"], inplace=True, axis=1)
+        df["target_date"] = df["target_date"].astype(str)
+        df[""] = None
+        df["date_assigned"] = df["date_assigned"].astype(str)
+        df["completed_task"] = df["completed_task"].astype(str)
+        my_data = json.loads(df.to_json(orient="split"))["data"]
+        my_cols = [{"title": str(col)} for col in json.loads(df.to_json(orient="split"))["columns"]]
+        # print(my_cols)
+        data = {"my_data": my_data, "my_cols": my_cols}
+        # print(data)
+        return JsonResponse(data)
+
+
+
+@csrf_exempt
+def save_edit(request):
+    if request.method == "POST":
+        print("\n\n\n\nheloooooooooooo i am here.................")
+
+        updatedData = json.loads(request.body.decode('UTF-8'))
+        print(updatedData)
+        status = updatedData["status"]
+        task_description = updatedData["task_description"]
+        target_date = updatedData["target_date"]
+        percentage = updatedData["percentage"]
+        id = updatedData["id"]
+
+        if int(percentage) > 100 or int(percentage) < 0:
+            return JsonResponse({'success':False,"reason":"percentage should be lesser than 100 and grater than 0"})
+
+        UserInfo.objects.filter(pk=id).update(task_description=task_description,
+                                              status=status,
+                                              target_date = target_date if target_date !="" else None,
+                                              percentage = percentage
+
+
+                                              )
+        return JsonResponse({'success':True})
 
 
