@@ -1,8 +1,8 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 import pandas as pd
 import datetime
 import json
-from .models import UserInfo
+from .models import UserInfo,Main_User_Info
 from django.http import JsonResponse
 # Create your views here.
 from django.http import HttpResponse
@@ -34,10 +34,13 @@ def home_page(request):
 def home_page1(request):
     print("came to homepage1")
     if request.method == "GET":
-        df = pd.DataFrame(list(UserInfo.objects.filter(first_name='Karthik').filter(completed_task__isnull=True).values()))
+        # first_name = Main_User_Info.objects.filter(first_name="Karthik")[0].
+        first_name=UserInfo.objects.filter(first_name__first_name='Karthik').filter(completed_task__isnull=True).values()
+        li=list(UserInfo.objects.filter(first_name__first_name='Karthik').filter(completed_task__isnull=True).values())
+        df = pd.DataFrame(li)
         # df = pd.DataFrame(list(UserInfo.objects.all().values('author', 'date', 'slug')))
-        print(df.head())
-        df.drop(["first_name","completed_task"],inplace=True,axis=1)
+        print(li)
+        df.drop(["first_name_id","completed_task"],inplace=True,axis=1)
         df["target_date"]=df["target_date"].astype(str)
         df[""] = None
         df["date_assigned"]=df["date_assigned"].astype(str)
@@ -55,10 +58,13 @@ def add_task(request):
         form = UserInfoForm(request.POST)
         # print(form)
 
-        if form.is_valid():
+        print(Main_User_Info.objects.filter(first_name="Karthik"))
 
+        if form.is_valid():
             new_author=form.save(commit=False)
-            new_author.first_name  = "Karthik"
+            new_author.first_name =  Main_User_Info.objects.filter(first_name="Karthik")[0]
+
+            # new_author.first_name  = "Karthik"
             new_author.save()
             print("khsdkhdidoodojodojdojoj")
 
@@ -70,7 +76,7 @@ def add_task(request):
 def delete_task(request,id):
     print("i am in delete ")
     if request.method == "GET":
-        UserInfo.objects.filter(id=id).delete()
+        UserInfo.objects.filter().delete()
 
     return redirect('homepage')
 
@@ -79,6 +85,11 @@ def completed_task(request,id):
     if request.method == "GET":
         import datetime
         # UserInfo.objects.filter(id=id).delete()
+        # first_name = UserInfo.objects.filter(first_name__first_name='Karthik').filter(
+        #     completed_task__isnull=True).values()
+        # li = list(
+        # UserInfo.objects.filter(first_name__first_name='Karthik').filter(completed_task__isnull=True).values())
+
         UserInfo.objects.filter(pk=id).update(completed_task=datetime.datetime.now(),status="Completed",percentage= 100)
 
     return redirect('homepage')
@@ -97,11 +108,10 @@ def total_tasks(request):
         return render(request, "total_task.html")
 
     if request.method == "POST":
-        df = pd.DataFrame(
-            list(UserInfo.objects.filter(first_name='Karthik').values()))
-        # df = pd.DataFrame(list(UserInfo.objects.all().values('author', 'date', 'slug')))
-        print(df.head())
-        df.drop(["first_name", "completed_task"], inplace=True, axis=1)
+        li = list(
+            UserInfo.objects.filter(first_name__first_name='Karthik').values())
+        df = pd.DataFrame(li)
+        df.drop(["first_name_id", "completed_task"], inplace=True, axis=1)
         df["target_date"] = df["target_date"].astype(str)
         df[""] = None
         df["date_assigned"] = df["date_assigned"].astype(str)
@@ -133,11 +143,12 @@ def completed_tasks_page(request):
 
     if request.method == "POST":
         print("i am in completed---------_task ")
-        df = pd.DataFrame(
-            list(UserInfo.objects.filter(first_name='Karthik').filter(completed_task__isnull=False).values()))
-        # df = pd.DataFrame(list(UserInfo.objects.all().values('author', 'date', 'slug')))
-        print(df.head())
-        df.drop(["first_name"], inplace=True, axis=1)
+        li = list(
+            UserInfo.objects.filter(first_name__first_name='Karthik').filter(completed_task__isnull=False).values())
+        df = pd.DataFrame(li)
+                # df = pd.DataFrame(list(UserInfo.objects.all().values('author', 'date', 'slug')))
+        print(df.head(1).T)
+        df.drop(["first_name_id"], inplace=True, axis=1)
         df["target_date"] = df["target_date"].astype(str)
         df[""] = None
         df["date_assigned"] = df["date_assigned"].astype(str)
@@ -177,3 +188,16 @@ def save_edit(request):
         return JsonResponse({'success':True})
 
 
+
+@csrf_exempt
+def update_note(request):
+    print("i am in get note ")
+    if request.method == "POST":
+        print("=========================")
+        updatedData = json.loads(request.body.decode('UTF-8'))
+        note = updatedData["note"]
+        id = int(updatedData["id"])
+        UserInfo.objects.filter(pk=id).update(note=note)
+        return JsonResponse({"success":True})
+
+    return redirect('homepage')

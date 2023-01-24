@@ -6,7 +6,13 @@
 
 
 });
-
+function fun( a,id){
+    console.log("hhhhhhhhhhhhhhhhhhhhhh")
+        console.log(a,id)
+        $("#note_ta").val(a)
+        $("#task_no_id").text(id)
+        $("#noteModal").modal('show');
+    }
 function load_table(){
     $.ajax(
     {
@@ -57,12 +63,13 @@ function load_table(){
                     ,
                   {
                     "target":7,
+
                      "render": function (data, type, full, meta) {
-                             return `<a class="btn btn-info btn-sm" href=/delete_task/` + full[0] + `/>` + `Delete` + `</a>&nbsp;<a class="btn btn-info btn-sm" href=/completed_task/` + full[0] + `>` + `finished` + `</a>`;
+                              kk=String(full[7])
+                              console.log(kk)
+                             return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete' + '</a>&nbsp;<a class="btn btn-info btn-sm" href=/completed_task/' + full[0] + '>' + 'finished' + '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
                      }
-
-
-                                      }
+                   }
 
                 ]
             })
@@ -74,15 +81,45 @@ function load_table(){
      }
 $(function(){
 
+    $("#save_note").click(function(){
+        console.log("-----------------------")
+        $.ajax({
+                        method:'POST',
+                        url:'/update_note/',
+                           contentType: 'application/json; charset=utf-8',
+                        data:JSON.stringify({
+                        id:$("#task_no_id").text(),
+                        note:$("#note_ta").val(),
+
+                    }),
+                    dataType: 'json',
+                    success: function(data) {
+                    if(data.success){
+
+//                                alert(data.success)
+                                $("#noteModal").modal('hide');
+                                alert('Data Successfully Posted');
+                                 document.location.href = '/todo/';
+                            }
+                     else{
+                       alert(data.reason);
+//
+//
+                     }
+                    },
+                    });
+
+
+
+
+
+    })
+
 
 //    let url = "{% url 'users:homepage1' %}";
-        load_table()
-
-
+   load_table()
    var choices = ["Not_Yet_Started","Started","Interrupted","Completed"]
-
      $("#task_to_do_edit_btn").on("click",function(){
-
 //          alert(this.text)
         if ($("#task_to_do_edit_btn").text()=="Edit mode"){
 

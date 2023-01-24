@@ -15,5 +15,6 @@ urlpatterns = [
     re_path("completed_tasks/", views.completed_tasks_page, name='completed_tasks_page'),
     re_path(r"revert_task/(?P<id>\d+)/$", views.revert_task, name='revert_task'),
     re_path(r"save_edit/", views.save_edit, name='save_edit'),
+    re_path(r"update_note/", views.update_note, name='update_note'),
 
 ]
