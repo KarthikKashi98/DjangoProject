@@ -9,7 +9,7 @@ TotalTasks
 
 {% block content %}
 
-<div class="heading" style="text-align:center;background-color:rgb(13,202,240);" >
+<div class="heading" style="text-align:center;background-color:rgb(13 240 54 / 23%);" >
     <div class="row">
         <div class="col">
 
@@ -36,11 +36,11 @@ TotalTasks
 
 
 </div>
-  <div class="tab2" style="font-size:12px">
+<div class="tab2" style="font-size:12px">
 
 
 
-    </div>
+</div>
 
 
 
@@ -50,8 +50,10 @@ TotalTasks
 {% block script %}
 
 
-    <!--<script src="{% static 'js/completed_task.js' %}"></script>-->
-
-    <script src="{% static 'js/total_task.js' %}"></script>
+<!--<script src="{% static 'js/completed_task.js' %}"></script>-->
+<script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.jqueryui.min.js' %}"></script>
+<script src="{% static 'js/total_task.js' %}"></script>
 {% endblock %}
 

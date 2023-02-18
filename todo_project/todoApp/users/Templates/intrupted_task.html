@@ -9,8 +9,6 @@ TotalTasks
 
 {% block content %}
 
-
-
 <div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -35,9 +33,6 @@ TotalTasks
     </div>
 </div>
 
-
-
-
 <div class="heading" style="text-align:center;background-color:rgb(13 240 54 / 23%);" >
     <div class="row">
         <div class="col">
@@ -46,7 +41,7 @@ TotalTasks
 
         </div>
         <div class="col-5">
-            <b style="font-size:17px">Completed Task </b>
+            <b style="font-size:17px">Interrupted Task </b>
 
         </div>
 
@@ -67,11 +62,11 @@ TotalTasks
 </div>
 
 
-  <div class="tab4" style="font-size:12px">
+<div class="tab6" style="font-size:12px">
 
 
 
-    </div>
+</div>
 
 
 
@@ -80,9 +75,10 @@ TotalTasks
 
 {% block script %}
 
-    <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
-    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'js/dataTables.jqueryui.min.js' %}"></script>
-    <script src="{% static 'js/completed_task_page.js' %}"></script>
+<script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.jqueryui.min.js' %}"></script>
+<script src="{% static 'js/introupted_task_page.js' %}"></script>
+
 
 {% endblock %}

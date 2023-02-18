@@ -12,15 +12,15 @@ $(function(){
        $.ajax(
     {
         type:"POST",
-        url: "/completed_tasks/",
+        url: "/interrupted_tasks/",
 
         success: function( json )
         {
           console.log(json)
           var data = json.my_data
           var cols = json.my_cols
-          $(".tab4").html('<table id="myTable4" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
-            $("#myTable4").DataTable({
+          $(".tab6").html('<table id="myTable5" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
+            $("#myTable5").DataTable({
                 order :[[1,"asc"]],
                 "data":data,
                 "columns":cols,
@@ -57,11 +57,9 @@ $(function(){
                   {
                     "target":8,
                      "render": function (data, type, full, meta) {
-//                               alert(full[9])
-                                kk=String(full[9])
-                              kk=escape(kk)
+                              kk=String(full[7])
 //                              console.log(kk)
-                             return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete'+ '</a>&nbsp;<a class="btn btn-info btn-sm" href=/revert_task/' + full[0] + '>' + 'Revert'+ '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
+                             return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete'+ '</a>&nbsp;<a class="btn btn-info btn-sm" href=/revert_task/' + full[0] + '>' + 'Revert'+ '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun('+kk+','+full[0]+')" >' + 'note' + '</button>';
                      }
 //                    "render": function (data, type, full, meta) {
 //                              kk=String(full[7])
@@ -98,7 +96,7 @@ $(function(){
 
                 ]
             })
-             $('#myTable4').on('draw.dt', function () {
+             $('#myTable5').on('draw.dt', function () {
                     $('[data-toggle="tooltip"]').tooltip();
                 });
         }

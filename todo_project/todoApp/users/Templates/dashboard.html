@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_filters %}
+<!--{% load crispy_forms_tags %}-->
+{% crispy example_form example_form.helper %}
+
+{%  block title %}
+homepage
+
+{% endblock %}
+{% block content %}
+
+
+<!--<h1>i am dashboard</h1>-->
+<style>
+
+
+    .card_card{
+        min-height:10px;
+        border:2px double black;
+        margin:0 auto;
+        margin-top:10px;
+        background-color:#f5cac2;
+        display: flex;
+        flex-direction: row;     /* make main axis horizontal (default setting) */
+        justify-content: center; /* center items horizontally, in this case */
+        align-items: center;        /* for single line flex container */
+        align-content: center;      /* for multi-line flex container */
+
+
+
+    }
+    #Completed_count,#uncompleted_count,#total_count,#interrupted_task{
+
+        color:blue;
+        font-weight:Bold;
+        font-size:20px;
+        text-align: center;
+        margin: 0 auto;
+    }
+    .side-item{
+        min-height:40px;
+        margin-top:5px;
+        background-color:#f5cac2;
+
+    }
+    .side-item1{
+        min-height:40px;
+        margin-top:5px;
+
+
+    }
+</style>
+<div class="container" style="text-align:center;margin:0 auto">
+    <div class="row">
+
+
+        <div class="col-3 card_card">
+            <b>Total num of task :</b>
+            <hr>
+            <a id ="total_count"  href="{% url 'total_task' %}"></a>
+
+
+        </div>
+        <div class="col-2 card_card">
+            <b>Remaining tasks :</b>
+            <hr>
+            <a id ="uncompleted_count"  href="{% url 'homepage' %}"></a>
+
+        </div>
+
+        <div class="col-2 card_card">
+            <b>Completed task :</b>
+            <hr>
+            <a id ="Completed_count" href="{% url 'completed_tasks_page' %}"></a>
+
+        </div>
+
+
+        <div class="col-2 card_card">
+            <b>Interrupted task :</b>
+            <hr>
+            <a id ="interrupted_task"  href="{% url 'interrupted_tasks' %}" ></a>
+
+        </div>
+
+    </div>
+    <hr>
+
+    <div class="row" style="border:2px solid black;height:450px; ">
+
+        <div class="col-2" style="border:1px solid yellow; background-color:#DC3545;">
+
+            <div class="box-1">
+                <div class="btn btn-one">
+                    <span>Manage Your Group</span>
+                </div>
+            </div>
+
+            <div class="box-1">
+                <div class="btn btn-one">
+                    <span>Create Group</span>
+                </div>
+            </div>
+            <div class="box-1">
+                <div class="btn btn-one">
+                    <span>View Group</span>
+                </div>
+            </div>
+            <div class="box-1">
+                <div class="btn btn-one">
+                    <span>Delete Group</span>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div class="col" style="border:1px solid Yellow">
+            <b>Create the task</b>
+            <hr>
+            <div class="row">
+                <div class="col-7" style="border-right:1px solid yellow">
+
+
+                    <div style="text-align:left;padding:3px"> Enter the group name: &nbsp;<input type="text">
+                    </div>
+                    <br>
+                    <br>
+                    <div style="text-align:left;padding:3px;border :1px solid black;width:100%;height:200px;overflow:auto" id="select_memb">
+
+
+                    </div>
+                    <br>
+                    <br>
+                    <button class="btn btn-primary" style="float:right">Create</button>
+                </div>
+                <div class="col-4">
+                    <!--<label for="groups">select your group</label>-->
+                    <!--<select name="groups" id="groups" style="min-width:100%">-->
+
+                    <!--<option value=""></option>-->
+
+
+
+                    <!--</select>-->
+
+                    <div id="autocomplete" class="autocomplete" style="width:100%; margin:40px auto;">
+                        <input class="autocomplete-input" />
+                        <ul id="ull" class="autocomplete-result-list" style="color:red;"></ul>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+</div>
+
+
+{% endblock %}
+
+
+{% block script %}
+
+
+    <script src="{% static 'js/intrupted_task.js' %}"></script>
+
+{% endblock %}

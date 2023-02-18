@@ -7,9 +7,9 @@
 
 });
 function fun( a,id){
-    console.log("hhhhhhhhhhhhhhhhhhhhhh")
+//    console.log("hhhhhhhhhhhhhhhhhhhhhh")
         console.log(a,id)
-        $("#note_ta").val(a)
+        $("#note_ta").val(unescape(a))
         $("#task_no_id").text(id)
         $("#noteModal").modal('show');
     }
@@ -21,12 +21,15 @@ function load_table(){
 
         success: function( json )
         {
-          console.log(json)
+//          console.log(json)
           var data = json.my_data
           var cols = json.my_cols
           $(".tab1").html('<table id="myTable" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
-            $("#myTable").DataTable({
-                order :[[1,"asc"]],
+            var table   =  $("#myTable").DataTable({
+
+             searchHighlight: true,
+//                order :[[1,"asc"]],
+                order :false,
                 "data":data,
                 "columns":cols,
                 "columnDefs":[
@@ -65,17 +68,58 @@ function load_table(){
                     "target":7,
 
                      "render": function (data, type, full, meta) {
-                              kk=String(full[7])
-                              console.log(kk)
+                              kk=String(full[8])
+
+//                              kk=kk.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                              if(kk){
+                              kk=escape(kk)
+                              }
+                              else{
+                                kk=escape("  -  ")
+                              }
                              return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete' + '</a>&nbsp;<a class="btn btn-info btn-sm" href=/completed_task/' + full[0] + '>' + 'finished' + '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
                      }
-                   }
+                   },
+
+                 { "target": 8, "visible": false},
+                 { "target":9,
+                  "render": function (data, type, full, meta) {
+
+                    if (full[9]=="High"){
+
+                            return(`<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>`)
+                    }
+                     else if(full[9]=="Medium"){
+                        return(`<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>`)
+                     }
+                     else if(full[9]=="Low"){
+
+                        return(`<i class="fa-solid fa-star"></i>`)
+
+                     }
+                     else{
+                        return full[9]
+                     }
+                     },
+
+
+                 }
+
 
                 ]
             })
              $('#myTable').on('draw.dt', function () {
                     $('[data-toggle="tooltip"]').tooltip();
+
+
+
                 });
+
+
+
+
+
+
         }
      })
      }
@@ -119,6 +163,7 @@ $(function(){
 //    let url = "{% url 'users:homepage1' %}";
    load_table()
    var choices = ["Not_Yet_Started","Started","Interrupted","Completed"]
+   var priority_choices = ['','High', 'Medium', 'Low']
      $("#task_to_do_edit_btn").on("click",function(){
 //          alert(this.text)
         if ($("#task_to_do_edit_btn").text()=="Edit mode"){
@@ -139,11 +184,12 @@ $(function(){
 
                               $(".tab1").html('<table id="myTable" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
                                 $("#myTable").DataTable({
-                                    order :[[1,"asc"]],
+                                    order :false,
                                     "data":data,
                                     "columns":cols,
                                     "columnDefs":[
                                      { "targets": [3], "visible": false},
+
                                     {
 
                                         "target":0,
@@ -180,6 +226,7 @@ $(function(){
                                         "render": function (data, type, full, meta) {
 
                                             html_stmt = `<select id="status_`+full[0]+`">`
+
                                             for (i of choices){
 //                                                console.log(i)
                                                 if (full[5] == i){
@@ -227,12 +274,40 @@ $(function(){
                                         "target":7,
 
                                          "render": function (data, type, full, meta) {
-                                                 console.log("btn")
+//                                                 console.log("btn")
                                                  return `<a class="btn btn-info btn-sm" href=/delete_task/` + full[0] + `/>` + `Delete` + `</a>&nbsp;<a class="btn btn-info btn-sm" href=/completed_task/` + full[0] + `>` + `finished` + `</a>&nbsp;<button class="btn btn-info btn-sm save_btn" id ="` + full[0] + `">` + `Save` + `</button>`;
                                          }
 
 
-                                                          }
+                                                          },
+                                      { "target": 8, "visible": false},
+                                      { "target": 9,
+
+                                        "render": function (data, type, full, meta) {
+                                             console.log(full[9])
+                                            html_stmt = `<select id="priority_`+full[0]+`">`
+
+                                            for (i of priority_choices){
+//                                                console.log(i,full[10])
+
+                                                if (full[9]  && (full[9] == i)){
+                                                html_stmt+=`<option value="`+i+`" selected>`+i+`</option>`
+                                                }
+                                                else{
+                                                     html_stmt+=`<option value="`+i+`">`+i+`</option>`
+                                                }
+
+
+                                            }
+                                            return html_stmt
+
+
+
+                                      }
+                                      },
+
+
+
 
                                     ]
                                 })
@@ -287,7 +362,8 @@ $(document).ready(function() {
                         task_description:$("#task_description_"+id).val(),
                         target_date:$("#target_date_"+id).val(),
                         status:$("#status_"+id).val(),
-                        percentage:$("#percentage_"+id).val()
+                        percentage:$("#percentage_"+id).val(),
+                        priority :$("#priority_"+id).val()
                     }),
                     dataType: 'json',
                     success: function(data) {
@@ -337,3 +413,13 @@ $(document).ready(function() {
 
 
 
+$(function(){
+    var current = location.pathname;
+    $('#nav li a').each(function(){
+        var $this = $(this);
+        // if the current path is like this link, make it active
+        if($this.attr('href').indexOf(current) !== -1){
+            $this.addClass('active');
+        }
+    })
+})
