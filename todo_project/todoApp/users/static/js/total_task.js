@@ -1,6 +1,6 @@
 
 $(function(){
-
+    $(".buttons-excel").html('Download')
        $.ajax(
     {
         type:"POST",
@@ -13,6 +13,16 @@ $(function(){
           var cols = json.my_cols
           $(".tab2").html('<table id="myTable1" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
             $("#myTable1").DataTable({
+                 dom: 'Bfrtip',
+                    buttons: [
+                     'excel'
+                    ],
+
+                "bJQueryUI":true,
+                  "bSort":false,
+                  "bPaginate":true,
+                  "sPaginationType":"full_numbers",
+                   "iDisplayLength": 10,
                 order :[[1,"asc"]],
                 "data":data,
                 "columns":cols,
