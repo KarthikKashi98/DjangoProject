@@ -10,47 +10,55 @@ homepage
 {% endblock %}
 {% block content %}
 
-
+{% csrf_token %}
 <!--<h1>i am dashboard</h1>-->
+<script src="{% static 'js/dashboard.js' %}"></script>
+<div class="modal fade" id="add_member_model" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="noteModalLabel">Add member to the group <span id="group name"></span> </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="height:170px">
+                <div class="row">
+                    <div class="col">
+                        Member :<span id = "select_memb1"></span>
+
+                    </div>
+
+                    <div class="col">
+                         <div id="autocomplete1" class="autocomplete" style="width:100%; margin:40px auto;">
+                            <input class="autocomplete-input" />
+                            <ul id="ull" class="autocomplete-result-list" style="color:red;"></ul>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+               <!--                    <input type="submit" value=Submit>-->
+
+            </div>
+            <div class="modal-footer">
+
+                <button id = "add_member"  class="btn btn-primary">Add member</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <style>
 
 
-    .card_card{
-        min-height:10px;
-        border:2px double black;
-        margin:0 auto;
-        margin-top:10px;
-        background-color:#f5cac2;
-        display: flex;
-        flex-direction: row;     /* make main axis horizontal (default setting) */
-        justify-content: center; /* center items horizontally, in this case */
-        align-items: center;        /* for single line flex container */
-        align-content: center;      /* for multi-line flex container */
 
-
-
-    }
-    #Completed_count,#uncompleted_count,#total_count,#interrupted_task{
-
-        color:blue;
-        font-weight:Bold;
-        font-size:20px;
-        text-align: center;
-        margin: 0 auto;
-    }
-    .side-item{
-        min-height:40px;
-        margin-top:5px;
-        background-color:#f5cac2;
-
-    }
-    .side-item1{
-        min-height:40px;
-        margin-top:5px;
-
-
-    }
 </style>
+<script src="{% static 'js/dashboard.js' %}"></script>
 <div class="container" style="text-align:center;margin:0 auto">
     <div class="row">
 
@@ -91,25 +99,30 @@ homepage
 
         <div class="col-2" style="border:1px solid yellow; background-color:#DC3545;">
 
-            <div class="box-1">
-                <div class="btn btn-one">
-                    <span>Manage Your Group</span>
+            <div class="box-1" >
+                <div class="btn btn-one manage" >
+                    <span >Manage Your Group</span>
                 </div>
             </div>
 
             <div class="box-1">
-                <div class="btn btn-one">
-                    <span>Create Group</span>
+                <div class="btn btn-one create">
+                    <span onclick="create_group_layout()">Create Group</span>
                 </div>
             </div>
             <div class="box-1">
-                <div class="btn btn-one">
+                <div class="btn btn-one view_groups">
                     <span>View Group</span>
                 </div>
             </div>
             <div class="box-1">
-                <div class="btn btn-one">
+                <div class="btn btn-one delete">
                     <span>Delete Group</span>
+                </div>
+            </div>
+            <div class="box-1">
+                <div class="btn btn-one assign_task">
+                    <span>Assign task</span>
                 </div>
             </div>
 
@@ -118,41 +131,13 @@ homepage
 
         </div>
         <div class="col" style="border:1px solid Yellow">
-            <b>Create the task</b>
-            <hr>
-            <div class="row">
-                <div class="col-7" style="border-right:1px solid yellow">
+            <div class="dashboard_group">
+                <!--{% if category == "create_group" %}-->
 
 
-                    <div style="text-align:left;padding:3px"> Enter the group name: &nbsp;<input type="text">
-                    </div>
-                    <br>
-                    <br>
-                    <div style="text-align:left;padding:3px;border :1px solid black;width:100%;height:200px;overflow:auto" id="select_memb">
-
-
-                    </div>
-                    <br>
-                    <br>
-                    <button class="btn btn-primary" style="float:right">Create</button>
-                </div>
-                <div class="col-4">
-                    <!--<label for="groups">select your group</label>-->
-                    <!--<select name="groups" id="groups" style="min-width:100%">-->
-
-                    <!--<option value=""></option>-->
-
-
-
-                    <!--</select>-->
-
-                    <div id="autocomplete" class="autocomplete" style="width:100%; margin:40px auto;">
-                        <input class="autocomplete-input" />
-                        <ul id="ull" class="autocomplete-result-list" style="color:red;"></ul>
-                    </div>
-
-                </div>
+                <!--{% endif %}-->
             </div>
+
 
         </div>
 
@@ -166,13 +151,16 @@ homepage
 
 </div>
 
-
+{% csrf_token %}
+<script>
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+</script>
 {% endblock %}
 
 
 {% block script %}
 
 
-    <script src="{% static 'js/dashboard.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
 
 {% endblock %}

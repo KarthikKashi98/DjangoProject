@@ -2,11 +2,10 @@ from django.shortcuts import render,redirect,get_object_or_404
 import pandas as pd
 import datetime
 import json
-from .models import UserInfo,Main_User_Info
+from .models import UserInfo,Main_User_Info,GroupsMembers,GroupInfo
 from django.http import JsonResponse
 # Create your views here.
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.core.serializers.json import DjangoJSONEncoder
 from .forms import UserInfoForm,CreateUserForm
 from django.contrib.auth.forms import UserCreationForm
@@ -15,6 +14,8 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.db.models import Q, Count
+from django.db import transaction
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
 @login_required(login_url='login')
 def home_page(request):
@@ -40,6 +41,7 @@ def home_page(request):
     context = {}
     initial = {'status': 'Not_Yet_Started'}
     context['form'] = UserInfoForm()
+
     return render(request,"todo_home_page.html",context)
 
 
@@ -97,6 +99,7 @@ def add_task(request):
             print("khsdkhdidoodojodojdojoj")
 
         else:
+            print("lalalalalalal")
             print("\n\n\n\n\n it is not valid")
     return redirect('homepage')
 
@@ -332,10 +335,6 @@ def signout(request):
 @login_required(login_url='login')
 def dashboard(request):
     if request.method == "POST":
-        print("ijosjos")
-        # UserInfo.objects.filter(pk=id).update(completed_task=datetime.datetime.now(), status="Completed",
-        #                                       percentage=100)
-        # print("------------", UserInfo.objects.filter(~Q(my_field=None)).values("first_name").annotate(Count("first_name")))
 
         print("=====>",UserInfo.objects.filter(completed_task__isnull=False,status="Interrupted").count(),"<===============")
         q= UserInfo.objects.filter(first_name__username=request.user)
@@ -345,14 +344,16 @@ def dashboard(request):
 
         return JsonResponse({"total_count": q.count(),
                              "completed_task": q.filter(~Q(status="Interrupted"),completed_task__isnull=False,
-                                                                               status="Completed").count(),
+                                                        status="Completed").count(),
                              "incomplete_task": q.filter(completed_task__isnull=True).count(),
                              "interrupted_task": q.filter(completed_task__isnull=False,status="Interrupted").count()})
 
     else:
 
         print("--------------------------------------------")
-        return render(request,"dashboard.html")
+        context = {}
+        context["category"] = "create_group"
+        return render(request,"dashboard.html",context  )
 
 
 
@@ -376,5 +377,229 @@ def search_person(request):
         for user in user_objects:
             namelist.append(user.username)
     return JsonResponse({'status':200, 'name':namelist})
+
+
+
+
+@csrf_exempt
+@login_required(login_url='login')
+# @transaction.atomic
+def create_group(request):
+    if request.method == "POST":
+
+        group_data = json.loads(request.body.decode('UTF-8'))
+        group_members = group_data["list_group_member"]
+        group_name = group_data["group_name"]
+        # q = UserInfo.objects.filter(first_name__username=)
+        group= GroupInfo(group_owner=request.user,group_name=group_name)
+        group.save()
+        # sid = transaction.savepoint()
+        #
+        # transaction.savepoint_commit(sid)
+        User = get_user_model()
+        print("\n\n\n\n\n\ngroup_members=========>",group_members,"=======\n\n\n\n\n\n")
+        if request.user.username not in group_members:
+            group_member = GroupsMembers(group=group, member_name=request.user)
+            group_member.save()
+
+
+        for i in group_members:
+
+
+
+            user_objects = User.objects.filter(username=i)[0]
+            group_member = GroupsMembers(group=group,member_name=user_objects)
+            group_member.save()
+
+        return JsonResponse({"success":True})
+
+
+
+
+@csrf_exempt
+@login_required(login_url='login')
+# @transaction.atomic
+def list_of_groups_and_members_in_group(request):
+    if request.method == "GET":
+        group_info = GroupInfo.objects.filter(group_owner=request.user)
+        print(group_info.values())
+        groups_members = GroupsMembers.objects.filter(group__group_owner=request.user)
+        print("group_info==>",list(group_info.values()))
+        print("group_members==>",list(groups_members.values()))
+        group_info = list(group_info.values())
+        group_members = groups_members
+        for i in range(len(group_info)):
+            for j in range(len(group_members)):
+                if group_info[i]["id"] == group_members[j].group_id:
+
+                    group_info[i]["members"] = group_info[i].get("members", [])+[group_members[j].member_name.username]
+                    # print(group_members[j].group_id)
+                    #
+                    # print(group_members[j].member_name)
+                group_info[i]["members"] = group_info[i].get("members", [])
+        print("--=group_info========>",{"group_info":group_info})
+
+        return JsonResponse({"group_info":group_info})
+
+
+
+
+@csrf_exempt
+@login_required(login_url='login')
+def delete_group(request,id):
+
+    print("i am villain............")
+
+    GroupInfo.objects.filter(id=id).delete()
+    return redirect('dashboard')
+
+
+@csrf_exempt
+@login_required(login_url='login')
+def delete_member(request,id):
+
+    print("i am villain............")
+
+    GroupsMembers.objects.filter(id=id).delete()
+    return redirect('dashboard')
+
+
+
+
+
+@csrf_exempt
+@login_required(login_url='login')
+# @transaction.atomic
+def get_group_members(request,id):
+    if request.method == "GET":
+        group_members = GroupsMembers.objects.filter(group__id=id)
+
+        group_members_list = []
+        for i in range(len(group_members)):
+            temp_dict = {"id":group_members[i].id}
+            temp_dict["joined_date"] = group_members[i].joined_date
+
+            temp_dict["member_name"] = group_members[i].member_name.username
+            temp_dict["designation"] = "Member" if group_members[i].member_name.username != group_members[i].group.group_owner.username else "Instigator"
+
+            group_members_list.append(temp_dict)
+
+        print(group_members_list)
+
+        print("group_info==>",list(group_members.values()))
+        if len(list(group_members.values())):
+
+            print("group_members========>",{"group_id":group_members[0].group_id,"group_name":group_members[0].group.group_name,"group_members":group_members_list})
+
+            return JsonResponse({"group_id":id,"group_name":group_members[0].group.group_name,"group_members":group_members_list})
+
+        else:
+
+            return JsonResponse({"group_id":id,"group_name":"no members in the group","group_members":[]})
+
+
+@csrf_exempt
+@login_required(login_url='login')
+# @transaction.atomic
+def add_member_to_the_group(request):
+    print("\n\n\n\n i am in add memner group")
+    member_data = json.loads(request.body.decode('UTF-8'))
+    group_id = int(member_data["group_id"])
+    print("group_id===========>",group_id,type(group_id))
+    member_name = member_data["username"]
+    User = get_user_model()
+    user_objects = User.objects.filter(username__icontains=member_name)[0]
+    group_object = GroupInfo.objects.filter(id=group_id)[0]
+    print(group_object)
+    group_member = GroupsMembers(group=group_object, member_name=user_objects)
+    group_member.save()
+
+    return JsonResponse({"success":True})
+
+@login_required(login_url='login')
+def add_task_from_the_group_manager(request):
+    print("\n\n\n\nheloooooooooooo i am here.................")
+    if request.method == "POST":
+
+        print("\n\n\n\nheloooooooooooo i am here.................")
+
+        json_string = request.body.decode('utf-8')
+        add_task = json.loads(json_string)
+        # print(add_task.task1)
+
+        task = add_task["task1"]
+        comments = add_task["comments1"]
+        note = add_task["note1"]
+        target_date = add_task["target_date1"]
+        priority = add_task["priority1"]
+        status = add_task["status1"]
+        group_name = add_task["group_name1"]
+        member_name = add_task["member_name1"]
+
+        print("\n",add_task,"\n")
+
+        print("success")
+        try:
+            User = get_user_model()
+            user_objects = User.objects.filter(username=member_name)[0]
+            print(task)
+            initial_values = {
+
+                    'task_description':task,
+                    'comments':comments,
+                    'target_date':target_date,
+                    'status':status,
+                    'note':note,
+                    'priority':priority
+                              }
+            form = UserInfoForm(data=initial_values)
+
+            print(user_objects)
+
+
+            if form.is_valid():
+                new_author = form.save(commit=False)
+                new_author.first_name = user_objects # Main_User_Info.objects.filter(first_name="Karthik")[0]
+
+                # new_author.first_name  = "Karthik"
+                new_author.save()
+                print("kjlkklskkksokosdkokdok")
+               # form.save(comit=True)
+
+            else:
+                print(form.errors)
+                print("form is invalid")
+                return JsonResponse({"success": False, "reason": "please try again later"})
+
+            # print("khsdkhdidoodojodojdojoj")
+
+            return JsonResponse({"success": True})
+
+        except Exception as e:
+            print(e)
+            return JsonResponse({"success": False,"reason":"please try again later"})
+
+
+@csrf_exempt
+@login_required(login_url='login')
+# @transaction.atomic
+def list_view_other_member_group(request):
+    if request.method == "GET":
+        group_name = GroupsMembers.objects.filter(~Q(group__group_owner=request.user)& Q(member_name = request.user))
+        print(group_name)
+        group_info=[]
+        for i in group_name:
+            a = GroupsMembers.objects.aggregate(
+
+                c1=Count('pk', filter=Q(group__group_name=i.group.group_name))
+            )
+            dict_group_info = {}
+            dict_group_info["group_name"] = i.group.group_name
+            dict_group_info["id"]=i.group.id
+            dict_group_info["count_members"]=a["c1"]
+            group_info.append(dict_group_info)
+
+        return JsonResponse({"group_info":group_info})
+
 
 

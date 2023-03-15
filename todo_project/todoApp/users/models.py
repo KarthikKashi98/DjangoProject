@@ -35,7 +35,9 @@ class Main_User_Info(models.Model):
 # Create your models here.
 class UserInfo(models.Model):
     first_name = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_assigned = models.DateField(auto_now_add=True)
+    # date_assigned = models.DateField(auto_now_add=True)
+    date_assigned = models.DateField()
+
     task_description = models.TextField()
     comments = models.TextField(null=True, blank=True)
     target_date = models.DateField(null=True, blank=True)
@@ -52,20 +54,30 @@ class UserInfo(models.Model):
         return self.task_description
 
 
-# # Create your models here.
-# class GroupInfo(models.Model):
-#     first_name = models.ForeignKey(Main_User_Info, on_delete=models.CASCADE)
-#     joined_date = models.DateField(auto_now_add=True)
-#     group_name = models.CharField(
-#                     max_length = 200,
-#                     unique = True,null=False, blank=False
-#                     )
-#     role = models.CharField(max_length=20, choices=Group_role_CHOICES)
-#
-#
-#
-#
-#
-#     def __str__(self):
-#         return self.task_description
-#
+# Create your models here.
+class GroupInfo(models.Model):
+    group_owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_date = models.DateField(auto_now_add=True)
+    group_name = models.CharField(
+                    max_length = 200,
+                    unique = True,null=False, blank=False
+                    )
+    project_name = models.CharField(
+        max_length=200,
+        unique=True, null=True, blank=True
+    )
+
+
+
+
+    def __str__(self):
+        return self.group_owner.username +"(" + self.group_name +")"
+
+
+class GroupsMembers(models.Model):
+    member_name = models.ForeignKey(User, on_delete=models.CASCADE)
+    group = models.ForeignKey(GroupInfo, on_delete=models.CASCADE)
+    joined_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.member_name.username +"(" + self.group.group_name +")"
