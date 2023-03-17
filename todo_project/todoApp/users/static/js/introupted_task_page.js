@@ -43,7 +43,7 @@ $(function(){
                      console.log(full)
                             return type === 'display'? '<div title="' + full[3] + '">' + data : data;
                      },
-                      "width": 430
+                      "width": 400
 
                   },
                    {

@@ -35,8 +35,8 @@ class Main_User_Info(models.Model):
 # Create your models here.
 class UserInfo(models.Model):
     first_name = models.ForeignKey(User, on_delete=models.CASCADE)
-    # date_assigned = models.DateField(auto_now_add=True)
-    date_assigned = models.DateField()
+    date_assigned = models.DateField(auto_now_add=True)
+    # date_assigned = models.DateField()
 
     task_description = models.TextField()
     comments = models.TextField(null=True, blank=True)

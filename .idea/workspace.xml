@@ -4,14 +4,8 @@
     <list default="true" id="c77daee6-b88d-40ad-8682-7fb991dcd961" name="Default Changelist" comment="commit from hp">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/todo_project/todoApp/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/todo_project/todoApp/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo_project/todoApp/users/Templates/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/todo_project/todoApp/users/Templates/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo_project/todoApp/users/Templates/todo_home_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/todo_project/todoApp/users/Templates/todo_home_page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo_project/todoApp/users/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/todo_project/todoApp/users/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/todo_project/todoApp/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/todo_project/todoApp/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo_project/todoApp/users/static/css/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/todo_project/todoApp/users/static/css/dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo_project/todoApp/users/static/js/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/todo_project/todoApp/users/static/js/dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo_project/todoApp/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/todo_project/todoApp/users/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo_project/todoApp/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/todo_project/todoApp/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/todo_project/todoApp/users/static/js/introupted_task_page.js" beforeDir="false" afterPath="$PROJECT_DIR$/todo_project/todoApp/users/static/js/introupted_task_page.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -186,11 +180,20 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/models.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="188">
-                  <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+                <state relative-caret-position="153">
+                  <caret line="42" column="25" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/static/js/introupted_task_page.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="178">
+                  <caret line="45" column="34" selection-start-line="45" selection-start-column="34" selection-end-line="45" selection-end-column="34" />
                 </state>
               </provider>
             </entry>
@@ -234,10 +237,10 @@
       <find>designation</find>
       <find>from</find>
       <find>user</find>
-      <find>Main_User_Info</find>
       <find>manage_group_lay_out</find>
       <find>card_card</find>
       <find>succe</find>
+      <find>Main_User_Info</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -257,7 +260,6 @@
         <option value="$PROJECT_DIR$/todo_project/todoApp/users/Templates/dashboard.html.py" />
         <option value="$PROJECT_DIR$/todo_project/todoApp/users/static/css/main.css" />
         <option value="$PROJECT_DIR$/todo_project/todoApp/users/static/js/completed_task_page.js" />
-        <option value="$PROJECT_DIR$/todo_project/todoApp/users/static/js/introupted_task_page.js" />
         <option value="$PROJECT_DIR$/todo_project/todoApp/users/Templates/base.html" />
         <option value="$PROJECT_DIR$/todo_project/todoApp/users/static/css/base.css" />
         <option value="$PROJECT_DIR$/todo_project/todoApp/users/static/js/total_task.js" />
@@ -272,8 +274,9 @@
         <option value="$PROJECT_DIR$/todo_project/todoApp/users/Templates/todo_home_page.html" />
         <option value="$PROJECT_DIR$/todo_project/todoApp/users/static/js/dashboard.js" />
         <option value="$PROJECT_DIR$/todo_project/todoApp/users/Templates/dashboard.html" />
-        <option value="$PROJECT_DIR$/todo_project/todoApp/users/models.py" />
         <option value="$PROJECT_DIR$/todo_project/todoApp/users/static/css/dashboard.css" />
+        <option value="$PROJECT_DIR$/todo_project/todoApp/users/models.py" />
+        <option value="$PROJECT_DIR$/todo_project/todoApp/users/static/js/introupted_task_page.js" />
       </list>
     </option>
   </component>
@@ -645,13 +648,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/static/js/introupted_task_page.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="70" selection-start-line="70" selection-end-line="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/static/js/total_task.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -689,8 +685,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/Templates/intrupted_task.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="14" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
+        <state relative-caret-position="884">
+          <caret line="74" selection-start-line="74" selection-end-line="74" />
           <folding>
             <element signature="n#div#0;n#!!top" />
           </folding>
@@ -699,8 +695,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/static/js/main_page.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6494">
-          <caret line="382" column="22" selection-start-line="378" selection-start-column="20" selection-end-line="382" selection-end-column="22" />
+        <state relative-caret-position="204">
+          <caret line="260" column="22" selection-start-line="260" selection-start-column="22" selection-end-line="260" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -723,8 +719,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/static/js/completed_task_page.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-692">
-          <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="46" />
+        <state relative-caret-position="34">
+          <caret line="2" selection-start-line="2" selection-end-line="8" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -737,8 +733,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="28">
-          <caret line="480" lean-forward="true" selection-start-line="480" selection-end-line="480" />
+        <state relative-caret-position="170">
+          <caret line="205" column="22" lean-forward="true" selection-start-line="205" selection-start-column="22" selection-end-line="205" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -756,17 +752,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/static/css/dashboard.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="145" column="32" selection-start-line="145" selection-start-column="26" selection-end-line="145" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="42" column="25" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/todo_project/todoApp/users/static/js/introupted_task_page.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="45" column="34" selection-start-line="45" selection-start-column="34" selection-end-line="45" selection-end-column="34" />
         </state>
       </provider>
     </entry>
