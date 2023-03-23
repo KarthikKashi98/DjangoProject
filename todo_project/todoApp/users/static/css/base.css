@@ -25,8 +25,20 @@ background-color: deepskyblue;
   font-weight:bold;
 }
 
-.buttons-html5{
+
+.buttons-html5 {
+    visibility: hidden;
+    position: relative;
+}
+.buttons-html5:after{
+    visibility: visible;
+    position: absolute;
     background-color:rgb(13,202,240);
-    padding:10px
+    padding:10px;
+    min-width:150px;
+    margin-left:20px;
+    border-radius:5px;
+
+    content: "Download as excel";
 
 }

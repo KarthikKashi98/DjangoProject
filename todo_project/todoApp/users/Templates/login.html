@@ -54,8 +54,10 @@ Login
             <hr>
         <p><input type="submit" name="login_user" class="btn btn-primary"></p>
             <p><a href="{% url 'signup' %}">Don't you have an account??</a></p>
+              <p><a href="#">Forgot password</a></p>
               {% for message in messages %}
         <p id="messages">{{message}}</p>
+
         {% endfor %}
         </div>
 

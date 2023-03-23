@@ -24,18 +24,20 @@ $(function(){
                 order :[[1,"asc"]],
                 "data":data,
                 "columns":cols,
+                 scrollY: '60vh',
                 "columnDefs":[
-                 { "targets": [3], "visible": false},
+                 { "targets": [3], "visible": false,"width": "2%"},
                 {
 
                     "target":0,
                     "serchable":true,
-                    "orderable":false
+                    "orderable":false,
+                    "width": "2%"
 
                     },
 
-                    { "width": 20, "target": 1 },
-                    { "width": 20, "target": 4 },
+                    { "width": "2%", "target": 1 },
+                    { "width": "3%", "target": 4 },
 
                   {
                   "target": 2,
@@ -43,11 +45,12 @@ $(function(){
                      console.log(full)
                             return type === 'display'? '<div title="' + full[3] + '">' + data : data;
                      },
-                      "width": 400
+                      "width": "28%"
 
                   },
                    {
                     "target":6,
+                     "width": "4%",
                     "render": function (data, type, full, meta) {
                     return `<progress id="alpha" value="`+full[6]+`" max="100">`+full[6]+`</progress>`
 

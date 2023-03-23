@@ -30,6 +30,7 @@ function load_table(){
             buttons: [
                 'csv', 'excel'
             ],
+
              searchHighlight: true,
 //                order :[[1,"asc"]],
                 order :false,
@@ -53,7 +54,7 @@ function load_table(){
                      "render": function (data, type, full, meta) {
                             return type === 'display'? '<div title="' + full[3] + '">' + data : data;
                      },
-                      "width": 500
+                      "width": "40%"
 
                   },
 
@@ -255,7 +256,7 @@ $(function(){
                                         },
                                         {
                                         "target":2,
-                                          "width": 500,
+                                          "width": 315,
                                         "render": function (data, type, full, meta) {
 
                                                 return `<textarea id = "task_description_${full[0]}"  style="width:100%; height:30px;" >${full[2]}</textarea>`

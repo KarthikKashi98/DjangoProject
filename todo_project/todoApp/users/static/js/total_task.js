@@ -13,10 +13,13 @@ $(function(){
           var cols = json.my_cols
           $(".tab2").html('<table id="myTable1" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
             $("#myTable1").DataTable({
-                 dom: 'Bfrtip',
+                 dom: 'lBfrtip',
                     buttons: [
                      'excel'
                     ],
+                    scrollY: '60vh',
+                    scrollCollapse: true,
+                    paging: true,
 
                 "bJQueryUI":true,
                   "bSort":false,
@@ -37,19 +40,20 @@ $(function(){
                     },
 
                     { "width": 20, "target": 1 },
-                    { "width": 20, "target": 4 },
+                    { "width": "8%", "target": 4 },
 
                   {
                   "target": 2,
                      "render": function (data, type, full, meta) {
-                        console.log(full[3],type)
+
                             return type === 'display'? '<div title="' + full[3] + '">' + data : data;
                      },
-                      "width": 470
+                      "width": "35%"
 
                   },
                   {
                     "target":6,
+                    "width": "6%",
                     "render": function (data, type, full, meta) {
                     return `<progress id="alpha" value="`+full[6]+`" max="100">`+full[6]+`</progress>`
 

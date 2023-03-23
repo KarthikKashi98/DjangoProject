@@ -3,6 +3,7 @@ from django.contrib import admin
 from . import views
 # from django.conf.urls import url
 from django.urls import path, re_path
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # path("admin/", admin.site.urls),
@@ -30,5 +31,19 @@ urlpatterns = [
     re_path(r'manage_group/members/create/', views.add_member_to_the_group, name="add_member_to_the_group"),
     re_path(r'manage_group/add_task_from_group/', views.add_task_from_the_group_manager, name="add_task_from_the_group_manager"),
     re_path(r'manage_group/view_other_group/', views.list_view_other_member_group, name="view_other_group"),
+    re_path(r'manage_group/view_other_group/', views.list_view_other_member_group, name="view_other_group"),
 
+    re_path('reset_password/',
+            auth_views.PasswordResetView.as_view(template_name="reset_password.html"),
+            name="reset_password"),
+    re_path('reset_password_sent/',
+            auth_views.PasswordResetDoneView.as_view(template_name="password_reset_sent.html")
+            ,name="password_reset_done"),
+    path('reset/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_form.html"),
+         name='password_reset_confirm'),
+    path('reset/done/',
+         auth_views.PasswordResetCompleteView.as_view(template_name="password_reset_complete.html"),
+         name='password_reset_complete'),
 ]
+

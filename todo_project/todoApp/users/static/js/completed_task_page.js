@@ -21,6 +21,19 @@ $(function(){
           var cols = json.my_cols
           $(".tab4").html('<table id="myTable4" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
             $("#myTable4").DataTable({
+
+                dom: 'lBfrtip',
+                buttons: [
+                 'excel'
+                ],
+                scrollY: '60vh',
+                scrollCollapse: true,
+                paging: true,
+                "bJQueryUI":true,
+                  "bSort":true,
+                  "bPaginate":true,
+                  "sPaginationType":"full_numbers",
+                   "iDisplayLength": 10,
                 order :[[1,"asc"]],
                 "data":data,
                 "columns":cols,
@@ -35,7 +48,7 @@ $(function(){
                     },
 
                     { "width": 20, "target": 1 },
-                    { "width": 20, "target": 4 },
+                    {"width": "8%", "target": 4 },
 
                   {
                   "target": 2,
@@ -43,7 +56,7 @@ $(function(){
                      console.log(full)
                             return type === 'display'? '<div title="' + full[3] + '">' + data : data;
                      },
-                      "width": 430
+                      "width": "27%"
 
                   },
                    {
