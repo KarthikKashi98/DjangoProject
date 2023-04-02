@@ -63,7 +63,7 @@ $(function(){
 
                   },
                   {
-                    "target":8,
+                    "target":9,
                      "render": function (data, type, full, meta) {
                             if (full[5] =="Completed"){
                                  return `<a class="btn btn-info btn-sm" href=/delete_task/` + full[0] + `/>` + `Delete` + `</a>&nbsp; <a class="btn btn-info btn-sm" href=/revert_task/` + full[0] + `>` + `Revert` + `</a>`;
@@ -80,21 +80,24 @@ $(function(){
                           }
                      },
                       { "targets": [7], "visible": false},
-                      { "target":9,
+                      { "targets": [10], "visible": false},
+
+
+                      { "target":8,
                   "render": function (data, type, full, meta) {
-                    if (full[9]=="High"){
+                    if (full[8]=="High"){
                             return(`<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>`)
                     }
-                     else if(full[9]=="Medium"){
+                     else if(full[8]=="Medium"){
                         return(`<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>`)
                      }
-                     else if(full[9]=="Low"){
+                     else if(full[8]=="Low"){
 
                         return(`<i class="fa-solid fa-star"></i>`)
 
                      }
                      else{
-                        return full[9]
+                        return full[8]
                      }
                      },
 

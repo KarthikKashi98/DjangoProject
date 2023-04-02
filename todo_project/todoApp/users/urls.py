@@ -31,7 +31,13 @@ urlpatterns = [
     re_path(r'manage_group/members/create/', views.add_member_to_the_group, name="add_member_to_the_group"),
     re_path(r'manage_group/add_task_from_group/', views.add_task_from_the_group_manager, name="add_task_from_the_group_manager"),
     re_path(r'manage_group/view_other_group/', views.list_view_other_member_group, name="view_other_group"),
-    re_path(r'manage_group/view_other_group/', views.list_view_other_member_group, name="view_other_group"),
+    re_path(r'manage_group/members_task/(?P<id>\d+)/$', views.group_tasks_page, name="view_group_member_task"),
+    re_path(r'manage_group/members_total_task/', views.group_member_total_tasks, name="member_total_tasks"),
+
+    re_path(r'manage_group/group_task/(?P<id>\d+)/$', views.total_group_tasks_page, name="total_group_tasks_page"),
+    re_path(r'manage_group/group_total_task/', views.group_total_tasks, name="group_total_tasks"),
+
+
 
     re_path('reset_password/',
             auth_views.PasswordResetView.as_view(template_name="reset_password.html"),

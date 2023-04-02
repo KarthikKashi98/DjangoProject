@@ -68,10 +68,10 @@ $(function(){
                     },
 
                   {
-                    "target":8,
+                    "target":9,
                      "render": function (data, type, full, meta) {
 //                               alert(full[9])
-                                kk=String(full[9])
+                                kk=String(full[8])
                               kk=escape(kk)
 //                              console.log(kk)
                              return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete'+ '</a>&nbsp;<a class="btn btn-info btn-sm" href=/revert_task/' + full[0] + '>' + 'Revert'+ '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
@@ -84,7 +84,8 @@ $(function(){
 //
 
                                       },
-                   { "targets": [9], "visible": false},
+                   { "targets": [8], "visible": false},
+                   { "targets": [11], "visible": false},
                    { "target": 10,
                     "render": function (data, type, full, meta) {
                     console.log(full[10])

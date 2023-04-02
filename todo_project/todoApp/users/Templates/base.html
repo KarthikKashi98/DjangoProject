@@ -39,7 +39,7 @@
 }
 </style>
 </head>
-<body style="width:99%;background-color: #eddcd9;">
+<body style="width:99%;background-color: #eddcd9;min-height: calc(99% - 5px); ">
 
 <!--<div class="container"></div>-->
 <nav class="navbar navbar-expand-sm navbar-dark bg-danger " style="color:white;width:100%">
@@ -102,7 +102,7 @@
 
 </nav>
 
-<div id = "content">
+<div id = "content" style=" ">
     {% block content %}
 
 
@@ -137,5 +137,15 @@
 
 
 {% endblock %}
+<footer style="height: 10px;
+  background-color: red;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;">
+
+    <!-- Footer content goes here -->
+  </footer>
 
 </html>

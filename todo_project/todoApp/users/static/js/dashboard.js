@@ -13,6 +13,73 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+function getCSRFToken() {
+var cookieValue = null;
+if (document.cookie && document.cookie != '') {
+    var cookies = document.cookie.split(';');
+        for (var i1 = 0; i1 < cookies.length; i1++) {
+            var cookie = jQuery.trim(cookies[i1]);
+                if (cookie.substring(0, 10) == ('csrftoken' + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(10));
+                            break;
+                            }
+                            }
+                            }
+                            return cookieValue;
+                }
+
+
+function csrfSafeMethod(method) {
+                        // these HTTP methods do not require CSRF protection
+                            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                            }
+//function group_task_page(member_id,member_name){
+//
+//
+//                    csrf_token = getCSRFToken()
+//                    $.ajax({
+//                            method:'POST',
+//                            url:'/manage_group/members_task/',
+//
+//                            data: JSON.stringify({
+//                                'member_name':member_name,
+//                               "member_id":member_id,
+//
+//                                'csrfmiddlewaretoken': csrf_token,
+//                                }),
+//                            beforeSend: function(xhr, settings) {
+//                                if (!csrfSafeMethod(settings.type)) {
+//                                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+//                                }
+//                                },
+//
+//
+//                            success: function(response) {
+//
+////                                     var newWindow = window.open('/manage_group/members_task/');
+//                            var newWindow = window.open();
+//                            newWindow.document.write(response.html);
+//                              $(newWindow).on("load", function() {
+//                                    setTimeout(function() {
+//                                        // Put your JavaScript code here
+//                                        console.log("jQuery is working in the new window");
+//                                    }, 100);
+//                                });
+////
+//
+//
+//                                },
+//
+//                            error: function(jqXHR, textStatus, errorThrown) {
+//                                    console.log('Error:', error);
+//                                  }
+//                            })
+//
+//
+//
+//
+//
+//}
 
 function fun(){
 //    console.log("hhhhhhhhhhhhhhhhhhhhhh")
@@ -131,7 +198,7 @@ if(sessionStorage.current_user_group_info==undefined){
 }
 username = sessionStorage.creating_member_name;
 group_id =  sessionStorage.current_group_id;
-alert(group_id)
+
 data=JSON.stringify({
     "username":username,
     "group_id":group_id
@@ -195,7 +262,9 @@ success: function(data) {
 
             if ((data["group_members"][i]["designation"]=="Member") && (from=="from_group_manager")){
                 category += `<hr>`
-                category+= `<a href="/manage_group/members/delete/${data['group_members'][i]['id']}" onclick="return confirm('Are you sure you want to delete the member?')"> Delete </a>`
+                category+=`<div>`
+                category+= `<span style="display:inline-block"><a href="/manage_group/members/delete/${data['group_members'][i]['id']}" onclick="return confirm('Are you sure you want to delete the member?')" style="font-size:13px;display:inline-block"> Delete </a></span>&nbsp;|&nbsp;<span style="display:inline-block"><a href="/manage_group/members_task/${data['group_members'][i]['id']}" style="font-size:13px;display:inline-block"  target="_blank">AssignedTask</a></span>`
+                category+=`</div>`
             }
             category += `</div>`
             }
@@ -354,7 +423,6 @@ dataType: 'json',
 success: function(data) {
 
 if(data.success){
-alert("ssssssssssssssssssssssssss")
 get_group_info()
 
 
@@ -381,7 +449,8 @@ for (let i = 0; i <  data["group_info"].length; i++) {
 category +=  `<div class="col-3 card" style = "min-height:100px">`
 category += `<span style="font-weight:bold">${data["group_info"][i]["group_name"]}</span>`
 category += `<hr>`
-category+= `members:<span style="font-weight:bold"><a id="${data['group_info'][i]['id']}"  class="member_list_call" href ="#" >${data["group_info"][i]["members"].length}</a></span>`
+category+= `<span style="display:inline-block">Members: &nbsp;<span style="font-weight:bold"><a id="${data['group_info'][i]['id']}"  class="member_list_call" href ="#" >${data["group_info"][i]["members"].length}</a></span></span>`
+category+=`<a href="/manage_group/group_task/${data['group_info'][i]['id']}" style="color: #ffffff;margin-top: 10px;font-size: 13px;" target="_blank">Total Task </a>`
 category += `</div>`
 }
 category+=`</div></div>`
@@ -590,7 +659,6 @@ $.ajax({
     $(".dashboard_group").on("click",".member_list_call1",function(){members_list($(this).attr("id"),"from_group_member")});
 
     $(".dashboard_group").on("click","#Group_Add_Task",function(){
-        alert("kjbkjbbjbbkjbkjkjnkjkjolijio")
            task1=$("#task_desc").val()
            comments1 =$("#task_comments").val()
            note1 = $("#task_note").val()
@@ -614,26 +682,26 @@ $.ajax({
 
                     console.log(task1,comments1,note1,target_date1,status1,group_name1,member_name1)
 
-                    function getCSRFToken() {
-                        var cookieValue = null;
-                        if (document.cookie && document.cookie != '') {
-                            var cookies = document.cookie.split(';');
-                                for (var i1 = 0; i1 < cookies.length; i1++) {
-                                    var cookie = jQuery.trim(cookies[i1]);
-                                        if (cookie.substring(0, 10) == ('csrftoken' + '=')) {
-                                                cookieValue = decodeURIComponent(cookie.substring(10));
-                                                    break;
-                                                    }
-                                                    }
-                                                    }
-                                                    return cookieValue;
-                                        }
+                        function getCSRFToken() {
+                            var cookieValue = null;
+                            if (document.cookie && document.cookie != '') {
+                                var cookies = document.cookie.split(';');
+                                    for (var i1 = 0; i1 < cookies.length; i1++) {
+                                        var cookie = jQuery.trim(cookies[i1]);
+                                            if (cookie.substring(0, 10) == ('csrftoken' + '=')) {
+                                                    cookieValue = decodeURIComponent(cookie.substring(10));
+                                                        break;
+                                                        }
+                                                        }
+                                                        }
+                                                        return cookieValue;
+                                            }
 
 
-                     function csrfSafeMethod(method) {
-                        // these HTTP methods do not require CSRF protection
-                            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));}
-                    csrf_token = getCSRFToken()
+                         function csrfSafeMethod(method) {
+                            // these HTTP methods do not require CSRF protection
+                                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));}
+                        csrf_token = getCSRFToken()
                     $.ajax({
                             method:'POST',
                             url:'/manage_group/add_task_from_group/',
@@ -743,7 +811,7 @@ $(".dashboard_group").on("change","#task_group_name",function(){
 
 $("#grp_create_btn").on("click",function(){
 
-    alert("kjhkjhj")
+//    alert("kjhkjhj")
 })
 
 

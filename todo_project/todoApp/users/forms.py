@@ -16,7 +16,7 @@ class UserInfoForm(forms.ModelForm):
             'target_date': DateInput()
         }
 
-        exclude = ('completed_task',"percentage","first_name",)
+        exclude = ('completed_task',"percentage","first_name","by")
 
     # def __str__(self):
     #     return self.task_description

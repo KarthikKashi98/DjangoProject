@@ -1,8 +1,8 @@
 
 
-    $(".nav-link a").on("click", function(){
-   $(".nav-link ").find(".active").removeClass("active");
-   $(this).parent().addClass("active");
+$(".nav-link a").on("click", function(){
+$(".nav-link ").find(".active").removeClass("active");
+$(this).parent().addClass("active");
 
 
 });
@@ -13,23 +13,81 @@ function fun( a,id){
         $("#task_no_id").text(id)
         $("#noteModal").modal('show');
     }
+ function getCSRFToken() {
+                        var cookieValue = null;
+                        if (document.cookie && document.cookie != '') {
+                            var cookies = document.cookie.split(';');
+                                for (var i1 = 0; i1 < cookies.length; i1++) {
+                                    var cookie = jQuery.trim(cookies[i1]);
+                                        if (cookie.substring(0, 10) == ('csrftoken' + '=')) {
+                                                cookieValue = decodeURIComponent(cookie.substring(10));
+                                                    break;
+                                                    }
+                                                    }
+                                                    }
+                                                    return cookieValue;
+                                        }
+
+
+ function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));}
+
 function load_table(){
+//    alert("loading a table")
+    csrf_token = getCSRFToken()
+    var member_name = $("#team_username").val()
+    var group_name = $("#team_name").val()
+    if(member_name){
+        url = "/manage_group/members_total_task/"
+    }
+    else{
+            url="/manage_group/group_total_task/"
+    }
+//    if !((member_name) || (group_name)){
+//        member_name=""
+//        group_name=""
+//    }
+
+//    alert(member_name)
     $.ajax(
     {
-        type:"GET",
-        url: "/todo1",
+        type:"POST",
+        url: url,
+        data:JSON.stringify({
+            "member_name":member_name,
+            "group_name":group_name,
+            'csrfmiddlewaretoken': csrf_token,
 
+        }),
+
+        beforeSend: function(xhr, settings) {
+                                if (!csrfSafeMethod(settings.type)) {
+                                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                                }
+                                },
+
+        dataType: 'json',
         success: function( json )
         {
 //          console.log(json)
           var data = json.my_data
           var cols = json.my_cols
-          $(".tab1").html('<table id="myTable" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
+          $(".tab5").html('<table id="myTable" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
+       $('#myTable tfoot th').each( function () {
+             var title = $(this).text();
+             $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            } );
+
             var table   =  $("#myTable").DataTable({
-            dom: 'Bfrtip',
+            dom: 'lBfrtip',
             buttons: [
-                'csv', 'excel'
+                'excel'
             ],
+            scrollY: '60vh',
+            scrollCollapse: true,
+            paging: true,
+
 
              searchHighlight: true,
 //                order :[[1,"asc"]],
@@ -88,7 +146,16 @@ function load_table(){
                               else{
                                 kk=escape("  -  ")
                               }
-                             return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete' + '</a>&nbsp;<a class="btn btn-info btn-sm" href=/completed_task/' + full[0] + '>' + 'finished' + '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
+                              if (full[5] =="Completed"){
+                               return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete' + '</a>&nbsp;<a class="btn btn-info btn-sm" href=/revert_task/' + full[0] + '>' + 'Revert' + '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
+
+//                                return `<a class="btn btn-info btn-sm" href=/delete_task/` + full[0] + `/>` + `Delete` + `</a>&nbsp; <a class="btn btn-info btn-sm" href=/revert_task/` + full[0] + `>` + `Revert` + `</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >note</button>`;
+
+                              }
+                              else{
+                                     return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete' + '</a>&nbsp;<a class="btn btn-info btn-sm" href=/completed_task/' + full[0] + '>' + 'finished' + '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
+
+                                     }
                      }
                    },
 
@@ -127,6 +194,18 @@ function load_table(){
 
                 });
 
+             table.columns().every( function () {
+
+                 var that = this;
+                 $( 'input', this.footer() ).on( 'keyup change', function () {
+                     if ( that.search() !== this.value ) {
+                         that
+                             .search( this.value )
+                             .draw();
+                     }
+                 } );
+             } );
+
 
 
 
@@ -137,7 +216,7 @@ function load_table(){
      }
 $(function(){
 
-    $("#save_note").click(function(){
+  $("#save_note").click(function(){
         console.log("-----------------------")
         $.ajax({
                         method:'POST',
@@ -155,7 +234,8 @@ $(function(){
 //                                alert(data.success)
                                 $("#noteModal").modal('hide');
                                 alert('Data Successfully Posted');
-                                      location.reload(true);
+//                                 document.location.href = '/todo/';
+                                location.reload(true);
                             }
                      else{
                        alert(data.reason);
@@ -172,20 +252,36 @@ $(function(){
     })
 
 
-//    let url = "{% url 'users:homepage1' %}";
-   load_table()
-   var choices = ["Not_Yet_Started","Started","Interrupted","Completed"]
+load_table()
+
+
+var choices = ["Not_Yet_Started","Started","Interrupted","Completed"]
    var priority_choices = ['','High', 'Medium', 'Low']
      $("#task_to_do_edit_btn").on("click",function(){
-//          alert(this.text)
+//        alert("gggggggggggggggggggg")
         if ($("#task_to_do_edit_btn").text()=="Edit mode"){
 
 
                 $("#task_to_do_edit_btn").text("Exit Edit mode")
+                csrf_token = getCSRFToken()
+                var member_name = $("#team_username").val()
+                var group_name = $("#team_name").val()
+                if(member_name){
+                    url = "/manage_group/members_total_task/"
+                }
+                else{
+                        url="/manage_group/group_total_task/"
+                }
                  $.ajax(
                         {
-                            type:"GET",
-                            url: "/todo1",
+                            type:"POST",
+                            url: url,
+                            data:JSON.stringify({
+                                "member_name":member_name,
+                                 "group_name":group_name,
+                                'csrfmiddlewaretoken': csrf_token,
+
+                            }),
 
                             success: function( json )
                             {
@@ -194,8 +290,8 @@ $(function(){
                               var cols = json.my_cols
 
 
-                              $(".tab1").html('<table id="myTable" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
-                                $("#myTable").DataTable({
+                              $(".tab5").html('<table id="myTable12" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
+                                $("#myTable12").DataTable({
 
                                     order :false,
                                     "data":data,
@@ -341,6 +437,7 @@ $(function(){
                       load_table()
 
 
+
              }
 
 
@@ -348,22 +445,7 @@ $(function(){
      })
 
 
-})
-
-$(document).ready(function() {
-            $("input").focusout(function() {
-                if($(this).val()=='') {
-                    $(this).css('border', 'solid 2px red');
-                }
-                else {
-
-                    // If it is not blank.
-                    $(this).css('border', 'solid 2px green');
-                }
-            }) .trigger("focusout");
-
-
-            $('.tab1').on("click",".save_btn",function(e) {
+        $('.tab5').on("click",".save_btn",function(e) {
 
 
 
@@ -386,7 +468,8 @@ $(document).ready(function() {
                     if(data.success){
 //                                alert(data.success)
                                 alert('Data Successfully Posted');
-                                 document.location.href = '/todo/';
+//                                 document.location.href = '/todo/';
+                                location.reload(true);
                             }
                      else{
                        alert(data.reason);
@@ -402,40 +485,4 @@ $(document).ready(function() {
 
 
 
-
-
-
-        });
-
-
-
-
-
-
-
-//jQuery(function($){
-//
-//$('button').click("#save_btn_4",function() {
-//    alert("jhgjhjghj")
-//});
-
-
-//const onClick = (event) => {
-//  if (event.target.nodeName === 'BUTTON') {
-//    console.log(event.target.id);
-//  }
-//}
-//window.addEventListener('click', onClick);
-
-
-
-$(function(){
-    var current = location.pathname;
-    $('#nav li a').each(function(){
-        var $this = $(this);
-        // if the current path is like this link, make it active
-        if($this.attr('href').indexOf(current) !== -1){
-            $this.addClass('active');
-        }
-    })
 })

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+
+
+<meta charset="UTF-8">
+    <!--    <title>Title</title>-->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/datatables.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jqueryui.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dataTables.searchHighlight.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+     <link rel="stylesheet" href="https://unpkg.com/@trevoreyre/autocomplete-js/dist/style.css" />
+
+    <title>{% block title %} {{member_name}} page  {% endblock %}</title>
+
+<style>
+
+
+
+.fa-stack[data-count]:after{
+  position:absolute;
+  right:0%;
+  top:0.3%;
+  content: attr(data-count);
+  font-size:90%;
+  padding:.1em;
+  border-radius:99px;
+  line-height:.75em;
+  color: white;
+  background:rgba(255,0,0,.85);
+  text-align:center;
+  min-width:0.5em;
+  font-weight:bold;
+  width: -10.5em;
+}
+
+ tfoot {
+    margin:100px;
+    display: table-header-group;
+}
+</style>
+
+<body style="width:99%;background-color: #eddcd9;">
+
+<div style="height:100%;
+                          height: 90vh;
+                            width:  99vw;">
+    <div class="heading" style="text-align:center;background-color:rgb(13 240 54 / 23%);" >
+
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col-5">
+
+                <b style="font-size:17px">Tasks of {{member_name}}{{ group_name }}</b>
+                {% if member_name %}
+                <input type="hidden" id="team_username" value = "{{member_name}}">
+                {% else %}
+                <input type="hidden" id="team_name" value = "{{group_name}}">
+                {% endif %}
+
+
+
+            </div>
+
+            <div class="col">
+                <button class="btn btn-primary btn-sm" id ="task_to_do_edit_btn">Edit mode</button>&nbsp;
+<!--                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Task</button>-->
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <div style="width:100%;overflow:auto">
+    <div class="tab5" style="font-size:12px;margin:20px" >
+
+
+
+    </div>
+        </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">-->
+<!--    Launch demo modal-->
+<!--</button>-->
+
+
+
+
+<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="noteModalLabel">Add a note for task id <span id="task_no_id"></span> </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <textarea class="form-control" id ="note_ta" style="min-width: 100%;min-height:400px"></textarea>
+                <!--                    <input type="submit" value=Submit>-->
+
+            </div>
+            <div class="modal-footer">
+
+                <button id = "save_note"  class="btn btn-primary">Save</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+</body>
+<!--<script src="{% static 'js/completed_task.js' %}"></script>-->
+
+<!--<script src="{% static 'js/total_task.js' %}"></script>-->
+<script src="{% static 'js/bootstrap.min.js' %}" ></script>
+<script src="{% static 'js/jquery-3.6.3.min.js' %}" ></script>
+<script src="{% static 'js/all.min.js' %}" ></script>
+<script src="{% static 'js/base.js' %}"  ></script>
+<script src="{% static 'js/jszip.min.js' %}" ></script>
+<script src="{% static 'js/jquery.dataTables.min.js' %}" ></script>
+<script src="{% static 'js/dataTables.jqueryui.min.js' %}" ></script>
+
+<!--<script src="https://unpkg.com/@trevoreyre/autocomplete-js"></script>-->
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+
+
+<!--<script src="{% static 'js/buttons.html5.min.js' %}"></script>-->
+<!--<script src="{% static 'js/main_page.js' %}"></script>-->
+<script src="{% static 'js/group_tasks.js' %}" ></script>
+
+<script src="{% static 'js/jszip.min.js' %}"></script>
+<script src="{% static 'js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'js/buttons.html5.min.js' %}"></script>
+

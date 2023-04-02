@@ -24,13 +24,11 @@ from django.core.mail import send_mail
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 import atexit
+from django.http import HttpResponseRedirect
 
 
 def my_function():
-    # Do something
-    name = "kk"
-    email = "karthik4gmit@gmail.com"
-    message = "om........"
+
     today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
     today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
     user_info = UserInfo.objects.filter(completed_task__isnull=True, target_date__range=(today_min, today_max))
@@ -60,10 +58,43 @@ def my_function():
         else:
             msg = "Mail could not sent"
         print(msg)
-    # return HttpResponse(msg)
+
+
+    today_min = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.time.min)
+    today_max = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.time.max)
+    user_info = UserInfo.objects.filter(completed_task__isnull=True, target_date__range=(today_min, today_max))
+    for i in user_info:
+
+        print(i.first_name, "\n", i.first_name.email)
+        # Construct the email message
+        from_email = settings.EMAIL_HOST_USER
+        to_email = [i.first_name.email]
+        if i.by:
+            to_email.append(i.by.group_owner.email)
+
+        subject = "Urgent:Task Completion today"
+        body = """\
+        This is a friendly reminder that the target completion date for task """+str(i.id)+""" has passed, and the task is still incomplete. As a reminder, completing this task is essential for [Reason for Task], and we would greatly appreciate it if you could complete it as soon as possible.
+        Task Details:
+        Task Description:"""+i.task_description+"""\n
+        Thank you for your attention to this matter
+        Best regards 
+        Your scheduler
+         """
+        print(body)
+
+
+
+        # Send the email
+        res = send_mail(subject, body, from_email, to_email)
+        if (res == 1):
+            msg = "Mail Sent Successfuly"
+
+        else:
+            msg = "Mail could not sent"
+        print(msg)
+
     print("Function executed at specific time every day.")
-
-
 scheduler = BackgroundScheduler()
 scheduler.add_job(my_function, trigger=CronTrigger(year="*", day="*", hour=0, minute=0))
 scheduler.start()
@@ -119,24 +150,30 @@ def home_page1(request):
         # first_name=UserInfo.objects.filter(first_name__first_name='Karthik').filter(completed_task__isnull=True).values()
         # q= UserInfo.objects.filter(first_name__first_name=request.user)
 
-        li = list(
-            UserInfo.objects.filter(first_name__username=request.user).filter(completed_task__isnull=True).values())
+
+        user_tasks=UserInfo.objects.filter(first_name__username=request.user).filter(completed_task__isnull=True)
+        user_tasks1=user_tasks.values()
+        li=[]
+        for i,j in zip(user_tasks,user_tasks1):
+            d=j
+            del(d["by_id"])
+            d["by"]=i.by.group_name if i.by else None
+            li.append(d)
+
         df = pd.DataFrame(li)
-        # df = pd.DataFrame(list(UserInfo.objects.all().values('author', 'date', 'slug')))
-        print(li)
         df.drop(["first_name_id", "completed_task"], inplace=True, axis=1)
         df.sort_values(["id"], ascending=False, inplace=True, ignore_index=True)
         df["target_date"] = df["target_date"].astype(str)
         # df[""] = None
-        df.insert(loc=len(df.columns) - 2,
+        df.insert(loc=len(df.columns) - 1,
                   column='',
                   value=None)
         df["date_assigned"] = df["date_assigned"].astype(str)
         dtype = pd.CategoricalDtype(['High', 'Medium', 'Low'], ordered=True)
         df['priority'] = df.priority.astype(dtype)
-
         df.sort_values(['priority'], inplace=True, ignore_index=True)
         print(df.head())
+        print(df.columns)
         my_data = json.loads(df.to_json(orient="split"))["data"]
         my_cols = [{"title": str(col)} for col in json.loads(df.to_json(orient="split"))["columns"]]
         # print(my_cols)
@@ -173,7 +210,8 @@ def delete_task(request, id):
     if request.method == "GET":
         UserInfo.objects.filter(id=id).delete()
 
-    return redirect('homepage')
+    # return redirect('homepage')
+    return HttpResponseRedirect(request.path_info)
 
 
 @login_required(login_url='login')
@@ -194,7 +232,7 @@ def completed_task(request, id):
         # UserInfo.objects.filter(pk=28)[0].status
 
     return redirect('homepage')
-
+    # return HttpResponseRedirect(request.path_info)
 
 @csrf_exempt
 @login_required(login_url='login')
@@ -205,8 +243,18 @@ def total_tasks(request):
 
     if request.method == "POST":
         print("i am in total task")
-        li = list(
-            UserInfo.objects.filter(first_name__username=request.user).values())
+        # li = list(
+        #     UserInfo.objects.filter(first_name__username=request.user).values())
+        #
+        user_tasks=UserInfo.objects.filter(first_name__username=request.user)
+        user_tasks1 = user_tasks.values()
+        print("user)task1------------------>",user_tasks1)
+        li = []
+        for i, j in zip(user_tasks, user_tasks1):
+            d = j
+            del (d["by_id"])
+            d["by"] = i.by.group_name if i.by else None
+            li.append(d)
         df = pd.DataFrame(li)
         df.drop(["first_name_id", "completed_task"], inplace=True, axis=1)
 
@@ -245,12 +293,23 @@ def completed_tasks_page(request):
 
     if request.method == "POST":
         print("i am in completed---------_task ")
-        li = list(
-            UserInfo.objects.filter(first_name__username=request.user).filter(~Q(status="Interrupted"),
-                                                                              completed_task__isnull=False).values())
+        # li = list(
+        #     UserInfo.objects.filter(first_name__username=request.user).filter(~Q(status="Interrupted"),
+        #                                                                       completed_task__isnull=False).values())
+
+        user_tasks = UserInfo.objects.filter(first_name__username=request.user).filter(~Q(status="Interrupted"),
+                                                                              completed_task__isnull=False)
+        user_tasks1 = user_tasks.values()
+        li = []
+        for i, j in zip(user_tasks, user_tasks1):
+            d = j
+            del (d["by_id"])
+            d["by"] = i.by.group_name if i.by else None
+            li.append(d)
+
         df = pd.DataFrame(li)
         # df = pd.DataFrame(list(UserInfo.objects.all().values('author', 'date', 'slug')))
-        print(df.head(1).T)
+
         df.drop(["first_name_id"], inplace=True, axis=1)
         df["target_date"] = df["target_date"].astype(str)
         # df[""] = None
@@ -259,6 +318,7 @@ def completed_tasks_page(request):
                   value=None)
         df["date_assigned"] = df["date_assigned"].astype(str)
         df["completed_task"] = df["completed_task"].astype(str)
+        print(df.head(1).T)
         my_data = json.loads(df.to_json(orient="split"))["data"]
         my_cols = [{"title": str(col)} for col in json.loads(df.to_json(orient="split"))["columns"]]
         # print(my_cols)
@@ -276,9 +336,19 @@ def intrupted_tasks_page(request):
 
     if request.method == "POST":
         print("i am in intrupted---------_task ")
-        li = list(
-            UserInfo.objects.filter(first_name__username=request.user).filter(Q(status="Interrupted"),
-                                                                              completed_task__isnull=False, ).values())
+        # li = list(
+        #     UserInfo.objects.filter(first_name__username=request.user).filter(Q(status="Interrupted"),
+        #                                                                       completed_task__isnull=False, ).values())
+
+        user_tasks = UserInfo.objects.filter(first_name__username=request.user).filter(Q(status="Interrupted"),
+                                                                              completed_task__isnull=False, )
+        user_tasks1 = user_tasks.values()
+        li = []
+        for i, j in zip(user_tasks, user_tasks1):
+            d = j
+            del (d["by_id"])
+            d["by"] = i.by.group_name if i.by else None
+            li.append(d)
         df = pd.DataFrame(li)
         # df = pd.DataFrame(list(UserInfo.objects.all().values('author', 'date', 'slug')))
         print(df.head(1).T)
@@ -296,6 +366,11 @@ def intrupted_tasks_page(request):
         data = {"my_data": my_data, "my_cols": my_cols}
         # print(data)
         return JsonResponse(data)
+
+
+
+
+
 
 
 @csrf_exempt
@@ -555,7 +630,6 @@ def add_member_to_the_group(request):
 
     return JsonResponse({"success": True})
 
-
 @login_required(login_url='login')
 def add_task_from_the_group_manager(request):
     print("\n\n\n\nheloooooooooooo i am here.................")
@@ -575,6 +649,8 @@ def add_task_from_the_group_manager(request):
         status = add_task["status1"]
         group_name = add_task["group_name1"]
         member_name = add_task["member_name1"]
+        group_obj = GroupInfo.objects.filter(group_name=group_name)[0]
+
 
         print("\n", add_task, "\n")
 
@@ -599,7 +675,7 @@ def add_task_from_the_group_manager(request):
             if form.is_valid():
                 new_author = form.save(commit=False)
                 new_author.first_name = user_objects  # Main_User_Info.objects.filter(first_name="Karthik")[0]
-
+                new_author.by = group_obj
                 # new_author.first_name  = "Karthik"
                 new_author.save()
                 print("kjlkklskkksokosdkokdok")
@@ -639,3 +715,116 @@ def list_view_other_member_group(request):
             group_info.append(dict_group_info)
 
         return JsonResponse({"group_info": group_info})
+
+
+
+
+
+from django.http import HttpResponseServerError
+@csrf_exempt
+@login_required(login_url='login')
+def group_tasks_page(request,id):
+    print("i am in group_tasks_page---------_task ")
+
+
+    if request.method == "GET":
+        name=GroupsMembers.objects.filter(member_name__id=id,group__group_owner__username=request.user)
+        # print("\n\n\n\n\n\n\n\n\n\n", name, "====================>",name[0].member_name.username)
+        if len(name):
+            return render(request, "group_task_view.html",{"member_name":name[0].member_name.username})
+
+        return render(request, "group_task_view.html")
+@csrf_exempt
+@login_required(login_url='login')
+def group_member_total_tasks(request):
+    if request.method == "POST":
+        print("i am in group_total task")
+
+        json_string = request.body.decode('utf-8')
+        memb_info = json.loads(json_string)
+        # li = list(
+        #     UserInfo.objects.filter(first_name__username=request.user).values())
+        #
+        print("=======================<>>>>>",memb_info["member_name"])
+        user_tasks=UserInfo.objects.filter(first_name__username=memb_info["member_name"] , by__group_owner__username=request.user)
+        user_tasks1 = user_tasks.values()
+        print("user)task1------------------>",user_tasks1)
+        li = []
+        for i, j in zip(user_tasks, user_tasks1):
+            d = j
+            del (d["by_id"])
+            d["by"] = i.by.group_name if i.by else None
+            li.append(d)
+        df = pd.DataFrame(li)
+        if len(df):
+            df.drop(["first_name_id", "completed_task"], inplace=True, axis=1)
+
+            df["target_date"] = df["target_date"].astype(str)
+            # df[""] = None
+            df.insert(loc=len(df.columns) - 1,
+                      column='',
+                      value=None)
+            df["date_assigned"] = df["date_assigned"].astype(str)
+            print(df.head(1).T)
+        my_data = json.loads(df.to_json(orient="split"))["data"]
+        my_cols = [{"title": str(col)} for col in json.loads(df.to_json(orient="split"))["columns"]]
+        # print(my_cols)
+        data = {"my_data": my_data, "my_cols": my_cols}
+        # print(data)
+        return JsonResponse(data)
+
+
+
+@csrf_exempt
+@login_required(login_url='login')
+def total_group_tasks_page(request,id):
+    print("i am in group_tasks_page---------_task ")
+
+
+    if request.method == "GET":
+
+        name=GroupInfo.objects.filter(id=id,group_owner__username=request.user)
+        # print("\n\n\n\n\n\n\n\n\n\n", name, "====================>",name[0].member_name.username)
+        if len(name):
+            return render(request, "group_task_view.html",{"group_name":name[0].group_name})
+
+        return render(request, "group_task_view.html")
+@csrf_exempt
+@login_required(login_url='login')
+def group_total_tasks(request):
+    if request.method == "POST":
+        print("i am in group_total task")
+
+        json_string = request.body.decode('utf-8')
+        memb_info = json.loads(json_string)
+        # li = list(
+        #     UserInfo.objects.filter(first_name__username=request.user).values())
+        #
+        # print("=======================<>>>>>",memb_info["member_name"])
+        user_tasks=UserInfo.objects.filter( by__group_name=memb_info["group_name"] , by__group_owner__username=request.user)
+        user_tasks1 = user_tasks.values()
+        print("user)task1------------------>",user_tasks1)
+        li = []
+        for i, j in zip(user_tasks, user_tasks1):
+            d = j
+            del (d["by_id"])
+            d["by"] = i.first_name.username if i.first_name.username else None
+            li.append(d)
+        df = pd.DataFrame(li)
+        if len(df):
+            df.drop(["first_name_id", "completed_task"], inplace=True, axis=1)
+
+            df["target_date"] = df["target_date"].astype(str)
+            # df[""] = None
+            df.insert(loc=len(df.columns) - 1,
+                      column='',
+                      value=None)
+            df["date_assigned"] = df["date_assigned"].astype(str)
+            print(df.head(1).T)
+        my_data = json.loads(df.to_json(orient="split"))["data"]
+        my_cols = [{"title": str(col)} for col in json.loads(df.to_json(orient="split"))["columns"]]
+        # print(my_cols)
+        data = {"my_data": my_data, "my_cols": my_cols}
+        # print(data)
+        return JsonResponse(data)
+
