@@ -26,11 +26,14 @@ function load_table(){
           var cols = json.my_cols
           $(".tab1").html('<table id="myTable" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
             var table   =  $("#myTable").DataTable({
-            dom: 'Bfrtip',
+            dom: 'lBfrtip',
             buttons: [
-                'csv', 'excel'
+                'csv'
             ],
-
+             "columns":cols,
+             scrollY: '55vh',
+            scrollCollapse: true,
+            paging: true,
              searchHighlight: true,
 //                order :[[1,"asc"]],
                 order :false,
@@ -200,6 +203,11 @@ $(function(){
                                     order :false,
                                     "data":data,
                                     "columns":cols,
+                                    scrollY: '55vh',
+                                    scrollCollapse: true,
+                                    paging: true,
+                                     searchHighlight: true,
+                        //                order :[[1,"asc"]],
                                     "columnDefs":[
                                      { "targets": [3], "visible": false},
 

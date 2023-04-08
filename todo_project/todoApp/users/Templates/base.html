@@ -39,7 +39,11 @@
 }
 </style>
 </head>
-<body style="width:99%;background-color: #eddcd9;min-height: calc(99% - 5px); ">
+<body style="width:99%;background-color: #eddcd9;margin: 0;
+			padding: 0;
+			min-height: 90vh;
+			display: flex;
+			flex-direction: column; ">
 
 <!--<div class="container"></div>-->
 <nav class="navbar navbar-expand-sm navbar-dark bg-danger " style="color:white;width:100%">
@@ -102,7 +106,7 @@
 
 </nav>
 
-<div id = "content" style=" ">
+<div id = "content" style=" flex: 1;">
     {% block content %}
 
 
@@ -137,13 +141,12 @@
 
 
 {% endblock %}
-<footer style="height: 10px;
-  background-color: red;
-  color: #fff;
-  text-align: center;
-  position: relative;
-  bottom: 0;
-  width: 100%;">
+<footer style="height: 2px;
+            font-size:12px;
+			color: white;
+			padding-bottom: 25px;
+			text-align: center;" class="bg-danger">
+    &copy; 2023 My Scheduler. All Rights Reserved
 
     <!-- Footer content goes here -->
   </footer>

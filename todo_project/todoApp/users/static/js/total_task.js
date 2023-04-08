@@ -17,7 +17,7 @@ $(function(){
                     buttons: [
                      'excel'
                     ],
-                    scrollY: '60vh',
+                    scrollY: '55vh',
                     scrollCollapse: true,
                     paging: true,
 

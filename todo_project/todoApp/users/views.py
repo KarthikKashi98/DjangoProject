@@ -25,6 +25,34 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 import atexit
 from django.http import HttpResponseRedirect
+import threading
+
+
+def send_mail_notification(subject, body, to_email):
+    print(subject,"\n","body:",body,"\n to email==>",to_email)
+
+    # Construct the email message
+    #     subject = "Urgent:Task Completion today"
+    #     body = """\
+    #     This is an automated reminder regarding the task""" + str(i.id) + """,  As a Reminder,the target date for complete the task by the end of the day
+    #     Task Details:
+    #     Task Description:"""+i.task_description+"""\n
+    #     Thank you for your attention to this matter
+    #     Best regards
+    #     Your scheduler
+    #      """
+
+    from_email = settings.EMAIL_HOST_USER
+
+    # Send the email
+    res = send_mail(subject, body, from_email, to_email)
+    print(res)
+    if (res == 1):
+        msg = "Mail Sent Successfuly"
+
+    else:
+        msg = "Mail could not sent"
+    print(msg)
 
 
 def my_function():
@@ -46,7 +74,7 @@ def my_function():
         Best regards 
         Your scheduler
          """
-        print(body)
+
         from_email = settings.EMAIL_HOST_USER
         to_email = [i.first_name.email]
 
@@ -196,7 +224,33 @@ def add_task(request):
 
             # new_author.first_name  = "Karthik"
             new_author.save()
-            print("khsdkhdidoodojodojdojoj")
+
+
+            subject = "Task Assigned Successfully"
+            body = """Dear """+request.user.username+""",
+
+            This is to inform you that the task you assigned to yourself has been successfully registered in our system. You are now responsible for completing the task by the deadline specified.
+
+            The details of the task are as follows:
+
+            Task Description: """ + request.POST.get('task_description') +"""
+            Task priority: """ + str(request.POST.get('priority')) +"""
+            Task comments: """ + str(request.POST.get("comments"))+"""
+
+
+            If you have any questions or concerns regarding this task, please do not hesitate to contact us. We will be happy to assist you in any way we can.
+
+            Thank you for choosing our system for managing your tasks.
+
+            Best regards,
+             Your scheduler"""
+            print("\n\n\n\n\n\nemail=====>",request.user.email)
+            t1 = threading.Thread(target=send_mail_notification, args=(subject,body,[request.user.email]))
+            t1.start()
+
+
+
+
 
         else:
             print("lalalalalalal")
@@ -208,10 +262,34 @@ def add_task(request):
 def delete_task(request, id):
     print("i am in delete ")
     if request.method == "GET":
-        UserInfo.objects.filter(id=id).delete()
+        task_description=UserInfo.objects.filter(id=id)[0].task_description
+        username=UserInfo.objects.filter(id=id)[0].first_name.username
 
-    # return redirect('homepage')
-    return HttpResponseRedirect(request.path_info)
+        UserInfo.objects.filter(id=id).delete()
+        subject = "Subject: Notification - Your Task Has Been Deleted"
+        body = """Dear """ + username + """,
+
+                    We regret to inform you that your task has been deleted by """+request.user.username+""". We apologize for any inconvenience this may have caused you.
+                    The details of the task are as follows:
+
+                    Task_id:"""+str(id)+"""
+                    Task Description: """ + task_description + """
+                    
+                    
+
+
+                    If you have any questions or concerns regarding this task, please do not hesitate to contact us. We will be happy to assist you in any way we can.
+
+                    Thank you for choosing our system for managing your tasks.
+
+                    Best regards,
+                     Your scheduler"""
+
+        t1 = threading.Thread(target=send_mail_notification, args=(subject, body, [request.user.email]))
+        t1.start()
+
+    return redirect('homepage')
+    # return HttpResponseRedirect(request.path_info)
 
 
 @login_required(login_url='login')
@@ -318,7 +396,7 @@ def completed_tasks_page(request):
                   value=None)
         df["date_assigned"] = df["date_assigned"].astype(str)
         df["completed_task"] = df["completed_task"].astype(str)
-        print(df.head(1).T)
+        # print(df.head(1).T)
         my_data = json.loads(df.to_json(orient="split"))["data"]
         my_cols = [{"title": str(col)} for col in json.loads(df.to_json(orient="split"))["columns"]]
         # print(my_cols)
@@ -351,7 +429,7 @@ def intrupted_tasks_page(request):
             li.append(d)
         df = pd.DataFrame(li)
         # df = pd.DataFrame(list(UserInfo.objects.all().values('author', 'date', 'slug')))
-        print(df.head(1).T)
+        # print(df.head(1).T)
         df.drop(["first_name_id"], inplace=True, axis=1)
         df["target_date"] = df["target_date"].astype(str)
         # df[""] = None
@@ -586,7 +664,7 @@ def get_group_members(request, id):
 
         group_members_list = []
         for i in range(len(group_members)):
-            temp_dict = {"id": group_members[i].id}
+            temp_dict = {"id": group_members[i].member_name.id}
             temp_dict["joined_date"] = group_members[i].joined_date
 
             temp_dict["member_name"] = group_members[i].member_name.username
@@ -679,7 +757,29 @@ def add_task_from_the_group_manager(request):
                 # new_author.first_name  = "Karthik"
                 new_author.save()
                 print("kjlkklskkksokosdkokdok")
-            # form.save(comit=True)
+                # form.save(comit=True)
+                subject = "Task Assigned Successfully"
+                body = """Dear """ + user_objects.username + """,
+
+                            This is to inform you that You have been assigned a new task by """+request.user.username+""". Here are the details of the task.
+
+                            The details of the task are as follows:
+
+                            Task Description: """ + task + """
+                            Task priority: """ + priority + """
+                            Task comments: """ + comments + """
+
+
+                            If you have any questions or concerns regarding this task, please do not hesitate to contact us. We will be happy to assist you in any way we can.
+
+                            Thank you for choosing our system for managing your tasks.
+
+                            Best regards,
+                             Your scheduler"""
+                print("\n\n\n\n\n\nemail=====>", request.user.email)
+                t1 = threading.Thread(target=send_mail_notification, args=(subject, body, [user_objects.email]))
+                t1.start()
+
 
             else:
                 print(form.errors)

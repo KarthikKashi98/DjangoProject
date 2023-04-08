@@ -1,3 +1,94 @@
+//dynamic datatabledatatable header
+
+
+
+
+
+//
+//
+//function MakeColumnHeaderHtml(ColumnHeaderNames){
+//	var table_head = '<thead class="table-header"><tr>';
+//	$.each(ColumnHeaderNames, function(data, value) {
+//		table_head += '<th>';
+//		table_head += value;
+//		table_head += '</th>';
+//        });
+//	table_head += '</tr></thead>';
+//	return table_head;
+//}
+//
+//
+////to generate data table
+//var flag_select = true;
+//var flag_keys = true;
+//function getDatatableDef(columnDef, flag_select, flag_keys){
+//    var datatableFormat = {
+//    dom: 'Bflrtip',
+//    processing: true,
+//    deferRender: true,
+//	columns: columnDef,
+//	info:true,
+//	fixedHeader: true,
+//	select: flag_select,
+//	keys: flag_keys,
+//	searching:true,
+//	ordering: true,
+//	mark: true,
+//	scrollX: true,
+//	sScrollY: 700,
+//	paging: true,
+//	pageLength:100,
+//    lengthMenu: [100, 200, 500, 1000, 2000],
+//    bScrollInfinite: true,
+//    bScrollCollapse: true,
+//	initComplete: function () {
+//            this.api().columns().every( function () {
+//                var that = this;
+//                $('input', this.header()).on('keyup change clear', function () {
+//                    if (that.search() !== this.value) {
+//                        that.search(this.value).draw();
+//                    }
+//                } );
+//            } );
+//        }
+//	};
+//	return datatableFormat;
+//}
+//
+//function datatable(id,response){
+// var headerName = Object.keys(response[0]);
+//            const tab = $(id);
+//            if ($.fn.DataTable.isDataTable(tab)) {
+//                $(tab).DataTable().destroy();
+//                $(tab).empty();
+//              }
+//            var tableHeaderHtml = MakeColumnHeaderHtml(headerName);
+//            var columns1 = [];
+//            $(id).append(tableHeaderHtml);
+//            $(''+id +' thead th').each( function () {
+//                var title = $(this).text();
+//                $(this).append( '<input type="text" placeholder="Search for Keywords '+title+'" />' );
+//            });
+//
+//            for(var i=0; i< headerName.length; i++){
+//                columns1.push({"data":headerName[i]});
+//            }
+//
+//            var datatableInstance = $(id).DataTable(getDatatableDef(columns1));
+//
+//            datatableInstance.rows.add(response).draw();
+//        }
+//
+//        =====================================================
+
+
+
+
+
+
+
+
+
 
 
 $(".nav-link a").on("click", function(){
@@ -74,119 +165,156 @@ function load_table(){
           var data = json.my_data
           var cols = json.my_cols
           $(".tab5").html('<table id="myTable" class="table table-bordered table-striped"><tr><th>high</th></tr></table> ')
-       $('#myTable tfoot th').each( function () {
-             var title = $(this).text();
-             $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-            } );
+
+
 
             var table   =  $("#myTable").DataTable({
-            dom: 'lBfrtip',
-            buttons: [
-                'excel'
-            ],
-            scrollY: '60vh',
-            scrollCollapse: true,
-            paging: true,
 
 
-             searchHighlight: true,
-//                order :[[1,"asc"]],
-                order :false,
-                "data":data,
-                "columns":cols,
-                "columnDefs":[
-                 { "targets": [3], "visible": false},
-                {
 
-                    "target":0,
-                    "serchable":true,
-                    "orderable":false
-
-                    },
-
-                    { "width": 20, "target": 1 },
-                    { "width": 20, "target": 4 },
-
-                  {
-                  "target": 2,
-                     "render": function (data, type, full, meta) {
-                            if(full[10]){
-                                r = full[10]+": "
-
-                            }
-                            else{
-                                r = ""
-                            }
-                            return type === 'display'? '<div title="' + full[3] + '"><span style="color:blue">' + r+'</span>'+data : data;
-                     },
-                      "width": "35%"
-
-                  },
-
-                  {
-                    "target":6,
-                    "render": function (data, type, full, meta) {
+                            dom: 'lBfrtip',
+                            buttons: [
+                                'excel'
+                            ],
+                            scrollY: '60vh',
+                             scrollResize: true,
+                            scrollCollapse: true,
+                            paging: true,
 
 
-                            return `<progress id="alpha" value="`+full[6]+`" max="100">`+full[6]+`</progress>`
+                             searchHighlight: true,
+                //                order :[[1,"asc"]],
+                                order :false,
+                                "data":data,
+                                "columns":cols,
+                                "columnDefs":[
+                                 { "targets": [3], "visible": false},
+                                {
 
-                    }
-                    }
-                    ,
-                  {
-                    "target":9,
+                                    "target":0,
+                                    "serchable":true,
+                                    "orderable":false
 
-                     "render": function (data, type, full, meta) {
-                              kk=String(full[7])
+                                    },
 
-//                              kk=kk.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                              if(kk){
-                              kk=escape(kk)
-                              }
-                              else{
-                                kk=escape("  -  ")
-                              }
-                              if (full[5] =="Completed"){
-                               return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete' + '</a>&nbsp;<a class="btn btn-info btn-sm" href=/revert_task/' + full[0] + '>' + 'Revert' + '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
+                                    { "width": '11%', "target": 1, searchable: true },
+                                    { "width": "11%", "target": 4, searchable: true },
 
-//                                return `<a class="btn btn-info btn-sm" href=/delete_task/` + full[0] + `/>` + `Delete` + `</a>&nbsp; <a class="btn btn-info btn-sm" href=/revert_task/` + full[0] + `>` + `Revert` + `</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >note</button>`;
+                                  {
+                                  "target": 2,
+                                     "render": function (data, type, full, meta) {
+                                            if(full[10]){
+                                                r = full[10]+": "
 
-                              }
-                              else{
-                                     return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete' + '</a>&nbsp;<a class="btn btn-info btn-sm" href=/completed_task/' + full[0] + '>' + 'finished' + '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
+                                            }
+                                            else{
+                                                r = ""
+                                            }
+                                            return type === 'display'? '<div title="' + full[3] + '"><span style="color:blue">' + r+'</span>'+data : data;
+                                     },
+                                      "width": "30%"
+
+                                  },
+
+                                  {
+                                    "target":6,
+                                    "render": function (data, type, full, meta) {
+
+
+                                            return `<progress id="alpha" value="`+full[6]+`" max="100">`+full[6]+`</progress>`
+
+                                    }
+                                    }
+                                    ,
+                                  {
+                                    "target":9,
+
+                                     "render": function (data, type, full, meta) {
+                                              kk=String(full[7])
+
+                //                              kk=kk.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                                              if(kk){
+                                              kk=escape(kk)
+                                              }
+                                              else{
+                                                kk=escape("  -  ")
+                                              }
+                                              if (full[5] =="Completed"){
+                                               return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete' + '</a>&nbsp;<a class="btn btn-info btn-sm" href=/revert_task/' + full[0] + '>' + 'Revert' + '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
+
+                //                                return `<a class="btn btn-info btn-sm" href=/delete_task/` + full[0] + `/>` + `Delete` + `</a>&nbsp; <a class="btn btn-info btn-sm" href=/revert_task/` + full[0] + `>` + `Revert` + `</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >note</button>`;
+
+                                              }
+                                              else{
+                                                     return '<a class="btn btn-info btn-sm" href=/delete_task/' + full[0] + '/>' + 'Delete' + '</a>&nbsp;<a class="btn btn-info btn-sm" href=/completed_task/' + full[0] + '>' + 'finished' + '</a>&nbsp;<button class="btn btn-info btn-sm" onClick="fun(`'+kk+'`,'+full[0]+')" >' + 'note' + '</button>';
+
+                                                     }
+                                     }
+                                   },
+
+                                 { "target": 7, "visible": false},
+                                 { "target":8,
+                                  "render": function (data, type, full, meta) {
+
+                                    if (full[8]=="High"){
+
+                                            return(`<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>`)
+                                    }
+                                     else if(full[8]=="Medium"){
+                                        return(`<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>`)
+                                     }
+                                     else if(full[8]=="Low"){
+
+                                        return(`<i class="fa-solid fa-star"></i>`)
 
                                      }
-                     }
-                   },
-
-                 { "target": 7, "visible": false},
-                 { "target":8,
-                  "render": function (data, type, full, meta) {
-
-                    if (full[8]=="High"){
-
-                            return(`<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>`)
-                    }
-                     else if(full[8]=="Medium"){
-                        return(`<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>`)
-                     }
-                     else if(full[8]=="Low"){
-
-                        return(`<i class="fa-solid fa-star"></i>`)
-
-                     }
-                     else{
-                        return full[8]
-                     }
-                     },
+                                     else{
+                                        return full[8]
+                                     }
+                                     },
 
 
-                 },
+                                 },
 
-                  { "target": 10, "visible": false},
+                                  { "target": 10, "visible": false},
 
-                ]
+                                ]
             })
+            table.columns().every(function() {
+            var column = this;
+            var header = $(column.header());
+            var title = header.text();
+
+            var input = $('<br><input  class="table_input" type="text" placeholder="' + title + '" style= "font-size:10px;padding:0px"/>')
+              .appendTo(header)
+
+              .on('keyup change clear', function() {
+                if (column.search() !== this.value) {
+                  column
+                    .search(this.value)
+                    .draw();
+                }
+              });
+
+          });
+
+//            $('input.table_input').each(function() {
+//    var placeholder = $(this).attr('placeholder');
+//    $(this).css('width', placeholder.length-3 + 'em');
+//  });
+
+$('input.table_input' ).each(function() {
+    var placeholder = $(this).attr('placeholder');
+    var tempSpan = $('<span>').text(placeholder).appendTo('body').hide();
+    var width = tempSpan.width();
+    tempSpan.remove();
+    $(this).css('width', width + 'px');
+  });
+
+
+
+
+
              $('#myTable').on('draw.dt', function () {
                     $('[data-toggle="tooltip"]').tooltip();
 
@@ -194,17 +322,8 @@ function load_table(){
 
                 });
 
-             table.columns().every( function () {
 
-                 var that = this;
-                 $( 'input', this.footer() ).on( 'keyup change', function () {
-                     if ( that.search() !== this.value ) {
-                         that
-                             .search( this.value )
-                             .draw();
-                     }
-                 } );
-             } );
+
 
 
 
@@ -360,7 +479,7 @@ var choices = ["Not_Yet_Started","Started","Interrupted","Completed"]
                                         },
                                         {
                                         "target":2,
-                                          "width": 315,
+                                          "width": 300,
                                         "render": function (data, type, full, meta) {
 
                                                 return `<textarea id = "task_description_${full[0]}"  style="width:100%; height:30px;" >${full[2]}</textarea>`
