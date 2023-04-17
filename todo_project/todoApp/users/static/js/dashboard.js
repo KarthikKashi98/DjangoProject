@@ -424,6 +424,8 @@ success: function(data) {
 
 if(data.success){
 get_group_info()
+alert("group is created successfully")
+manage_group_lay_out()
 
 
 }
