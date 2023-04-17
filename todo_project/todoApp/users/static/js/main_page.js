@@ -14,10 +14,12 @@ function fun( a,id){
         $("#noteModal").modal('show');
     }
 function load_table(){
+// alert("i came fro load table")
     $.ajax(
     {
+
         type:"GET",
-        url: "/todo1",
+        url: "/todo1/",
 
         success: function( json )
         {
@@ -394,7 +396,7 @@ $(document).ready(function() {
                     if(data.success){
 //                                alert(data.success)
                                 alert('Data Successfully Posted');
-                                 document.location.href = '/todo/';
+                                 document.location.href = '/';
                             }
                      else{
                        alert(data.reason);

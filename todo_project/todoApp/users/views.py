@@ -155,6 +155,7 @@ def home_page(request):
         my_cols = [{"title": str(col)} for col in json.loads(df.to_json(orient="split"))["columns"]]
         print(my_cols)
         data = {"my_data": my_data, "my_cols": my_cols}
+        print('-------------------------------------------------------',data)
         return data
     context = {}
     initial = {'status': 'Not_Yet_Started'}
@@ -174,6 +175,8 @@ def home_page1(request):
     print("came to homepage1")
     print(request.user)
     if request.method == "GET":
+        print("came to homepage1")
+        print(request.user)
         # first_name = Main_User_Info.objects.filter(first_name="Karthik")[0].
         # first_name=UserInfo.objects.filter(first_name__first_name='Karthik').filter(completed_task__isnull=True).values()
         # q= UserInfo.objects.filter(first_name__first_name=request.user)
@@ -181,6 +184,7 @@ def home_page1(request):
 
         user_tasks=UserInfo.objects.filter(first_name__username=request.user).filter(completed_task__isnull=True)
         user_tasks1=user_tasks.values()
+        print(user_tasks1,"=======================>")
         li=[]
         for i,j in zip(user_tasks,user_tasks1):
             d=j
@@ -549,11 +553,30 @@ def dashboard(request):
         print("[[[[[[[[[}}}}}}}}}}}}}}}}}",
               q.filter(completed_task__isnull=True).count())
 
+        import plotly.graph_objs as go
+        from plotly.utils import PlotlyJSONEncoder
+
+        # Create the graph data
+        x = [1, 2, 3, 4, 5]
+        y = [2, 4, 3, 1, 5]
+        graph_data = go.Scatter(x=x, y=y)
+        graph_json = json.dumps(graph_data, cls=PlotlyJSONEncoder)
+
+
+        # Pass the graph data to the template context
+        # context = {'graph_data': graph_data}
+
         return JsonResponse({"total_count": q.count(),
                              "completed_task": q.filter(~Q(status="Interrupted"), completed_task__isnull=False,
                                                         status="Completed").count(),
                              "incomplete_task": q.filter(completed_task__isnull=True).count(),
-                             "interrupted_task": q.filter(completed_task__isnull=False, status="Interrupted").count()})
+                             "interrupted_task": q.filter(completed_task__isnull=False, status="Interrupted").count(),
+
+                             'graph_data': graph_json
+                             },
+
+
+                            )
 
     else:
 

@@ -22,11 +22,11 @@ $(function(){
                     paging: true,
 
                 "bJQueryUI":true,
-                  "bSort":false,
+                  "bSort":true,
                   "bPaginate":true,
                   "sPaginationType":"full_numbers",
                    "iDisplayLength": 10,
-                order :[[1,"asc"]],
+//                order :[[1,"asc"]],
                 "data":data,
                 "columns":cols,
                 "columnDefs":[

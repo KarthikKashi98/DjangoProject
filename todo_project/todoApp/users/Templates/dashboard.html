@@ -131,7 +131,7 @@ homepage
 
         </div>
         <div class="col" style="border:1px solid Yellow">
-            <div class="dashboard_group">
+            <div class="dashboard_group" id = "dashboard_group" style="text-align:center">
                 <!--{% if category == "create_group" %}-->
 
 
@@ -160,7 +160,7 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
 {% block script %}
 
-
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
 
 {% endblock %}

@@ -643,6 +643,27 @@ $.ajax({
             $("#uncompleted_count").text(data.incomplete_task)
             $("#Completed_count").text(data.completed_task)
             $("#interrupted_task").text(data.interrupted_task)
+//            var data1 = {{ data.graph_data|safe }};
+              var graph_data = JSON.parse(data.graph_data);
+//
+            var data = [{
+              values: [data.incomplete_task, data.interrupted_task, data.completed_task],
+              labels: ['incomplete_task', 'interrupted_task', 'completed_task'],
+              type: 'pie'
+            }];
+
+            var layout = {
+//              height: 400,
+//              width: 500,
+             paper_bgcolor:'rgba(0,0,0,0)',
+             plot_bgcolor:'rgba(0,0,0,0)'
+            };
+
+            Plotly.newPlot('dashboard_group', data, layout);
+
+
+
+
 
 
             }
