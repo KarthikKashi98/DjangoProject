@@ -1,0 +1,47 @@
+Task Scheduler
+
+  The Task Scheduler is a powerful software tool designed to help users organize and manage their tasks effectively. It provides an intuitive and easy-to-use interface for creating, editing, and deleting tasks, setting up reminders, and viewing task history. With the ability to create groups, assign tasks, and save notes, the Task Scheduler is an efficient and customizable platform for managing tasks and collaborating with team members.
+
+Developer Details:
+
+Developer: Karthik K
+  I am a software developer with experience in web application development using Python,plotly,flask and Django. I created the Task Scheduler app as a personal project to help myself and others manage their tasks efficiently. If you have any questions or feedback, feel free to contact me at karthikkrishnamurhy4@gmail.com
+
+Tools Used
+
+•	Programming Languages: Python, JavaScript, HTML, CSS
+
+•	Web Development Framework: Django
+
+•	Front-end libraries: jQuery, Plotly
+
+•	Database Management System: SQLite
+
+
+User Authentication
+
+  The Task Scheduler comes with a robust user authentication system to ensure that only authorized users have access to the platform. Here are some of the key features of the authentication system:
+
+1.	Basic Authentication: Users can sign up, log in, and change their passwords using a secure and user-friendly interface.
+2.	Registration: To access the features of the Task Scheduler, users must first create an account by providing their information and a valid email address and password.
+3.	Login: Once the user has registered, they can use their credentials to log in to the Task Scheduler and access all the features.
+4.	Forgot Password: If the user forgets their password, they can easily reset it by clicking on the "Forgot Password" link on the login page. An email will be sent to the user's email address with a link to reset their password.
+5.	Email-based Authentication: The Task Scheduler uses email-based authentication to ensure that only authorized users have access to the platform. This feature helps prevent unauthorized access and protects users' sensitive data.
+6.	Password Security: The Task Scheduler encourages users to use strong and unique passwords to ensure the security of their accounts.
+
+Features of the Task Scheduler
+
+  The Task Scheduler comes with a wide range of features to help users manage their tasks efficiently. Here are some of the key features:
+
+1.	Task Creation: Users can create new tasks by specifying the task name, description, start date, end date, and other relevant details. This feature allows users to schedule and manage their tasks efficiently.
+2.	Task Prioritization: Users can prioritize their tasks by assigning them a priority level such as high, medium, or low. This feature helps users focus on the most important tasks and ensures that they are completed on time.
+3.	Task Reminders: Users can receive email notifications when their tasks are created, deleted, or when their due date is approaching. These notifications contain all the relevant information about the task, including its name, description, start and end dates, and the user who created or deleted it. This feature ensures that users are always aware of any changes to their tasks and can take appropriate action if necessary, helping to prevent tasks from being forgotten or overlooked.
+4.	Task Assignments: Users can assign tasks to other users or team members, along with the due date and other details. This feature helps in delegating tasks and tracking their progress.
+5.	Task Filtering: Users can filter their tasks based on various criteria such as priority, due date, and completion status. This feature allows users to view their tasks in a structured manner and focus on the most important ones.
+6.	Task Reports: Users can generate reports on their tasks, including completion status, overdue tasks, and upcoming tasks. This feature helps in tracking progress and identifying areas for improvement.
+7.	Group Creation: Users can create a group and manage team members. This feature allows users to collaborate and assign tasks to team members efficiently.
+8.	Note Taking: Users can save notes about their tasks, providing a useful way to track progress and keep important information organized. This feature allows users to easily add details about a task, such as phone
+
+
+Thank you for taking the time to read this document about the Task Scheduler app
+
