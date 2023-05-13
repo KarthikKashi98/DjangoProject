@@ -2,8 +2,7 @@
 
   "builds": [{
         "src": "todo_project/wsgi.py",
-        "use": "@vercel/python",
-//    "config": {"maxLambdaSize": "255mb","runtime": "python3.10.5" }
+        "use": "@vercel/python"
   },
     {
     "src":"build.sh",
