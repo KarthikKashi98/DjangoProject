@@ -3,11 +3,11 @@
 # Create a virtual environment
 echo "Creating a virtual environment..."
 
-pip install psycopg2-binary
-pip install -r requirements.txt
-python3 manage.py collectstatic --noinput
-python3 manage.py makemigrations
-python3 manage.py migrate
+
+pip3.9 install -r requirements.txt
+python3.9 manage.py collectstatic --noinput
+python3.9 manage.py makemigrations
+python3.9 manage.py migrate
 
 
 DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
