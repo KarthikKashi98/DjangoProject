@@ -3,7 +3,7 @@
 # Create a virtual environment
 echo "Creating a virtual environment..."
 
-pip install psycopg2
+pip install psycopg2-binary
 pip install -r requirements.txt
 python3 manage.py collectstatic --noinput
 python3 manage.py makemigrations
