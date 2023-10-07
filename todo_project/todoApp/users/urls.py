@@ -4,7 +4,8 @@ from . import views
 # from django.conf.urls import url
 from django.urls import path, re_path
 from django.contrib.auth import views as auth_views
-
+from django.conf.urls.static import static
+from django.conf import settings
 urlpatterns = [
     # path("admin/", admin.site.urls),
     # re_path("todo/", views.home_page, name='homepage'),
@@ -54,3 +55,7 @@ urlpatterns = [
          name='password_reset_complete'),
 ]
 
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
