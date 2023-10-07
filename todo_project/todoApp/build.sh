@@ -2,8 +2,7 @@
 
 # Create a virtual environment
 echo "Creating a virtual environment..."
-python3.9 -m venv venv
-source venv/bin/activate
+
 pip install psycopg2
 pip install -r requirements.txt
 python3 manage.py collectstatic --noinput
