@@ -35,7 +35,7 @@ DEBUG = bool(int(os.getenv('DEBUG')))
 if DEBUG:
     ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]"]
 else:
-    ALLOWED_HOSTS = ['.vercel.app']
+    ALLOWED_HOSTS = ['.vercel.app','.now.sh']
 
 # ALLOWED_HOSTS = ['localhost','127.0.0.1', '.vercel.app']
 
