@@ -19,7 +19,9 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    load_dotenv(dotenv_file)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -100,11 +102,11 @@ WSGI_APPLICATION = "todoApp.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': os.environ['VERCEL_POSTGRES_HOST'],
-        'PORT': os.environ['VERCEL_POSTGRES_PORT'],
-        'NAME': os.environ['VERCEL_POSTGRES_DB'],
-        'USER': os.environ['VERCEL_POSTGRES_USER'],
-        'PASSWORD': os.environ['VERCEL_POSTGRES_PASSWORD'],
+        'HOST': os.environ['POSTGRES_HOST'],
+        'PORT': os.environ['POSTGRES_PORT'],
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
     }
 }
 
@@ -137,7 +139,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "/static/"
+STATIC_URL = "static/"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'users/static/'),
