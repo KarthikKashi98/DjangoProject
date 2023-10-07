@@ -89,11 +89,23 @@ WSGI_APPLICATION = "todoApp.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     # "default": {
+#     #     "ENGINE": "django.db.backends.sqlite3",
+#     #     "NAME": BASE_DIR / "db.sqlite3",
+#     # }
+# }
+
+
 DATABASES = {
-    # "default": {
-    #     "ENGINE": "django.db.backends.sqlite3",
-    #     "NAME": BASE_DIR / "db.sqlite3",
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': os.environ['VERCEL_POSTGRES_HOST'],
+        'PORT': os.environ['VERCEL_POSTGRES_PORT'],
+        'NAME': os.environ['VERCEL_POSTGRES_DB'],
+        'USER': os.environ['VERCEL_POSTGRES_USER'],
+        'PASSWORD': os.environ['VERCEL_POSTGRES_PASSWORD'],
+    }
 }
 
 
@@ -131,7 +143,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'users/static/'),
 
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'users/static/')
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'users/static/')
 # Default primary key field type
