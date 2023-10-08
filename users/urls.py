@@ -38,6 +38,7 @@ urlpatterns = [
 
     re_path(r'manage_group/group_task/(?P<id>\d+)/$', views.total_group_tasks_page, name="total_group_tasks_page"),
     re_path(r'manage_group/group_total_task/', views.group_total_tasks, name="group_total_tasks"),
+    re_path(r'details/', views.details_view, name="details_view"),
 
 
 

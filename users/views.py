@@ -951,3 +951,8 @@ def group_total_tasks(request):
         # print(data)
         return JsonResponse(data)
 
+
+
+def details_view(request):
+    return render(request, "details.html")
+
