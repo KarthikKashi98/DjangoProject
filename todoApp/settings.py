@@ -17,11 +17,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
 
-dotenv_file = os.path.join(BASE_DIR, ".env")
-if os.path.isfile(dotenv_file):
-    load_dotenv(dotenv_file)
+BASE_DIR = "/home/karthik1/DjangoProject"
+
+project_folder = os.path.expanduser('/home/karthik1/DjangoProject/todoApp')  # adjust as appropriate
+load_dotenv(os.path.join(project_folder, '.env'))
+
+
+# dotenv_file = os.path.join(BASE_DIR, ".env")
+# if os.path.isfile(dotenv_file):
+#     load_dotenv(dotenv_file)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -34,10 +40,8 @@ SECRET_KEY = "django-insecure--ur+$_+bey4=o^*1l1!x!!#r+t^ly#bp^5(yw6xs20=b=+uuyn
 DEBUG = bool(int(os.getenv('DEBUG')))
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
-if DEBUG:
-    ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]"]
-else:
-    ALLOWED_HOSTS = ['.vercel.app','.now.sh']
+
+ALLOWED_HOSTS = ['.vercel.app','.now.sh','karthik1.pythonanywhere.com',".localhost", "127.0.0.1", "[::1]"]
 
 # ALLOWED_HOSTS = ['localhost','127.0.0.1', '.vercel.app']
 
@@ -72,7 +76,9 @@ ROOT_URLCONF = "todoApp.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR,'users/templates')],
+        #"DIRS": [os.path.join(BASE_DIR,'users/templates')],
+        "DIRS": ["/home/karthik1/DjangoProject/users/Templates"],
+
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -94,7 +100,7 @@ WSGI_APPLICATION = "todoApp.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": os.path.join(BASE_DIR,"db.sqlite3"),
     }
 }
 
@@ -141,11 +147,11 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'users/static/'),
+# STATICFILES_DIRS = [
+#     "/home/karthik1/DjangoProject/users/static",
 
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'users/static/')
+# ]
+STATIC_ROOT = os.path.join("/home/karthik1/DjangoProject",  'users/static/')
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'users/static/')
 # Default primary key field type

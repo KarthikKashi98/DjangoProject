@@ -45,7 +45,7 @@ def send_mail_notification(subject, body, to_email):
     from_email = settings.EMAIL_HOST_USER
 
     # Send the email
-    res = send_mail(subject, body, from_email, to_email)
+    res = send_mail(subject, body, from_email, to_email, fail_silently=False)
     print(res)
     if (res == 1):
         msg = "Mail Sent Successfuly"
@@ -71,7 +71,7 @@ def my_function():
         Task Details:
         Task Description:"""+i.task_description+"""\n
         Thank you for your attention to this matter
-        Best regards 
+        Best regards
         Your scheduler
          """
 
@@ -106,7 +106,7 @@ def my_function():
         Task Details:
         Task Description:"""+i.task_description+"""\n
         Thank you for your attention to this matter
-        Best regards 
+        Best regards
         Your scheduler
          """
         print(body)
@@ -123,16 +123,16 @@ def my_function():
         print(msg)
 
     print("Function executed at specific time every day.")
-scheduler = BackgroundScheduler()
-scheduler.add_job(my_function, trigger=CronTrigger(year="*", day="*", hour=0, minute=0))
-scheduler.start()
+# scheduler = BackgroundScheduler()
+# scheduler.add_job(my_function, trigger=CronTrigger(year="*", day="*", hour=0, minute=0))
+# scheduler.start()
 
 
-def on_exit():
-    scheduler.shutdown()
+# def on_exit():
+#     scheduler.shutdown()
 
 
-atexit.register(on_exit)
+# atexit.register(on_exit)
 
 
 @login_required(login_url='login')
@@ -278,8 +278,8 @@ def delete_task(request, id):
 
                     Task_id:"""+str(id)+"""
                     Task Description: """ + task_description + """
-                    
-                    
+
+
 
 
                     If you have any questions or concerns regarding this task, please do not hesitate to contact us. We will be happy to assist you in any way we can.
