@@ -509,7 +509,7 @@ def login_page(request):
             print("user is loged in")
             return redirect("homepage")
         else:
-            messages.info(request, "username or password is wroung")
+            messages.info(request, "username or password is wrong")
             return render(request, "login.html")
     context = {}
     return render(request, "login.html", context)
